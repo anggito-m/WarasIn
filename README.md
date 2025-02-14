@@ -4,8 +4,6 @@ Belanjakan Uangmu
 
 Kelompok B3_02 
 
-Ketua Kelompok: Habib Fabian Fahlesi
-
-Anggota 1: Anggito Muhammad Amien
-
-Anggota 2: Jovita Ayu Ramaniyya
+Ketua Kelompok: 
+Anggota 1:
+Anggota 2: 
