@@ -17,10 +17,23 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    <br/><b>WarasIn</b>
 2. Permasalahan yang dipecahkan
    <br/><b>Latar Belakang</b>
-   <a>Masalah kesehatan mental kini menjadi salah satu isu paling mendesak di era modern
+   <br/><a>Masalah kesehatan mental kini menjadi salah satu isu paling mendesak di era modern
    ini. Berdasarkan data dari Kementerian Kesehatan RI (Kemenkes), sekitar 1 dari 10 orang
    di Indonesia mengalami gangguan kesehatan mental. Walaupun demikian, akses terhadap
    layanan kesehatan jiwa masih menjadi tantangan bagi sebagian besar masyarakat.
    Minimnya SDM yang terlatih, stigma sosial, serta faktor ekonomi menjadi penghambat
    utama dalam mendapatkan layanan yang dibutuhkan.</a>
+   
+   <br/><b>Rumusan Permasalahan</b>
+   <br/><ul>
+   <li>Apa solusi yang dapat diterapkan untuk meningkatkan akses masyarakat
+terhadap layanan kesehatan mental di Indonesia?
+</li>
+<li>Bagaimana pemanfaatan teknologi dapat membantu deteksi dini masalah
+kesehatan mental?
+</li>
+   </ul>
+
+   <br/><b>Daftar Pustaka</b>
+   <br/><a></a>
 3. 
