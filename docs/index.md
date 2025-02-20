@@ -19,13 +19,9 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    <br/><b>Latar Belakang</b>
    <br/>Masalah kesehatan mental kini menjadi salah satu isu paling mendesak di era modern ini. Berdasarkan data dari Kementerian Kesehatan RI (Kemenkes), sekitar 1 dari 10 orang di Indonesia mengalami gangguan kesehatan mental. Walaupun demikian, akses terhadap layanan kesehatan jiwa masih menjadi tantangan bagi sebagian besar masyarakat. Minimnya SDM yang terlatih, stigma sosial, serta faktor ekonomi menjadi penghambat utama dalam mendapatkan layanan yang dibutuhkan.</a>
    
-   <b>Rumusan Permasalahan</b>
-   <ol>
-      <li>
-         Apa solusi yang dapat diterapkan untuk meningkatkan akses masyarakat terhadap layanan kesehatan mental di Indonesia?</li>
-      <li>
-         Bagaimana pemanfaatan teknologi dapat membantu deteksi dini masalah kesehatan mental?</li>
-   </ol>
+   <b>Rumusan Permasalahan</b><br/>
+      a. Apa solusi yang dapat diterapkan untuk meningkatkan akses masyarakat terhadap layanan kesehatan mental di Indonesia?
+      b. Bagaimana pemanfaatan teknologi dapat membantu deteksi dini masalah kesehatan mental?</li>
 
    <b>Daftar Pustaka</b>
    <br/>
