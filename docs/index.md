@@ -24,7 +24,7 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    Minimnya SDM yang terlatih, stigma sosial, serta faktor ekonomi menjadi penghambat
    utama dalam mendapatkan layanan yang dibutuhkan.</a>
    
-   <br/><b>Rumusan Permasalahan</b>
+   <b>Rumusan Permasalahan</b>
    <br/><ol>
       <li>
          Apa solusi yang dapat diterapkan untuk meningkatkan akses masyarakat terhadap layanan kesehatan mental di Indonesia?</li>
@@ -32,6 +32,15 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
          Bagaimana pemanfaatan teknologi dapat membantu deteksi dini masalah kesehatan mental?</li>
    </ol>
 
-   <br/><b>Daftar Pustaka</b>
-   <br/><a></a>
+   <b>Daftar Pustaka</b>
+   <br/>
+   <ul>
+      <li>CNN Indonesia. (2023, November 7). Menkes ungkap 1 dari 10 orang di Indonesia alami gangguan jiwa. CNN Indonesia. https://www.cnnindonesia.com/nasional/20231108035404-20-1021300/menkesungkap-1-dari-10-orang-di-indonesia-alami-gangguan-jiwa
+      </li>
+      </li>Graham, S., Depp, C., Lee, E., Nebeker, C., Tu, X., Kim, H., & Jeste, D. (2019). Artificial
+intelligence for mental health and mental illnesses: An overview. Current Psychiatry
+Reports, 21(11). https://doi.org/10.1007/s11920-019-1094-0
+</li>
+</li>Wainberg, M., Scorza, P., Shultz, J., Helpman, L., Mootz, J., Johnson, K., Neria, Y., Bradford, J., Oquendo, M., & Arbuckle, M. (2017). Challenges and opportunities in global mental health: A research-to-practice perspective. Current Psychiatry Reports, 19(10), 1-10. https://doi.org/10.1007/s11920-017-0780-z </li>
+</ul>
 3. 
