@@ -46,5 +46,11 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    ![image](https://github.com/user-attachments/assets/4a3a6593-eb9d-4241-a86f-d5acf1e4207c)
 
 4. Analisis Kompetitor
+   <br/>![image](https://github.com/user-attachments/assets/1a4131e3-b3b9-4de4-adb1-478922fced8a)
+   <br/>![image](https://github.com/user-attachments/assets/6e1211a5-c9af-4bd8-9686-fe7e432302ec)
+   <br/>![image](https://github.com/user-attachments/assets/08fb0f47-fe19-43c0-babd-94d2d70dd4fe)
+
+
+
    
 
