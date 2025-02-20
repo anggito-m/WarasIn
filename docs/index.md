@@ -49,6 +49,8 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    <br/>![image](https://github.com/user-attachments/assets/1a4131e3-b3b9-4de4-adb1-478922fced8a)
    <br/>![image](https://github.com/user-attachments/assets/6e1211a5-c9af-4bd8-9686-fe7e432302ec)
    <br/>![image](https://github.com/user-attachments/assets/08fb0f47-fe19-43c0-babd-94d2d70dd4fe)
+5. Lean Canvas
+   <br/>![Learn Canvas WarasIn-1](https://github.com/user-attachments/assets/82875563-bb83-4469-b44c-2a709d74f17e)
 
 
 
