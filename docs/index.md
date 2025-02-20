@@ -33,4 +33,10 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
       <li>Graham, S., Depp, C., Lee, E., Nebeker, C., Tu, X., Kim, H., & Jeste, D. (2019). Artificial intelligence for mental health and mental illnesses: An overview. Current Psychiatry Reports, 21(11). https://doi.org/10.1007/s11920-019-1094-0 </li>
       <li>Wainberg, M., Scorza, P., Shultz, J., Helpman, L., Mootz, J., Johnson, K., Neria, Y., Bradford, J., Oquendo, M., & Arbuckle, M. (2017). Challenges and opportunities in global mental health: A research-to-practice perspective. Current Psychiatry Reports, 19(10), 1-10. https://doi.org/10.1007/s11920-017-0780-z </li>
 </ul>
-3. 
+3. Ide solusi yang diusulkan beserta rancangan fitur
+   <b>Solusi</b>
+   Platform Kesehatan mental support yang berfokus pada AI untuk menyediakan :
+   • Deteksi dini masalah Kesehatan mental
+   • Pemantauan dan dukungan terkait Kesehatan mental
+   • Akses chatbot dengan resource fokus pada mental health
+
