@@ -31,7 +31,7 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
       <li>CNN Indonesia. (2023, November 7). Menkes ungkap 1 dari 10 orang di Indonesia alami gangguan jiwa. CNN Indonesia. https://www.cnnindonesia.com/nasional/20231108035404-20-1021300/menkesungkap-1-dari-10-orang-di-indonesia-alami-gangguan-jiwa
       </li>
       <li>Graham, S., Depp, C., Lee, E., Nebeker, C., Tu, X., Kim, H., & Jeste, D. (2019). Artificial intelligence for mental health and mental illnesses: An overview. Current Psychiatry Reports, 21(11). https://doi.org/10.1007/s11920-019-1094-0 </li>
-      <li>Wainberg, M., Scorza, P., Shultz, J., Helpman, L., Mootz, J., Johnson, K., Neria, Y., Bradford, J., Oquendo, M., & Arbuckle, M. (2017). Challenges and opportunities in global mental health: A research-to-practice perspective. Current Psychiatry Reports, 19(10), 1-10. https://doi.org/10.1007/s11920-017-0780-z </li></ul>
+      <li>Wainberg, M., Scorza, P., Shultz, J., Helpman, L., Mootz, J., Johnson, K., Neria, Y., Bradford, J., Oquendo, M., & Arbuckle, M. (2017). Challenges and opportunities in global mental health: A research-to-practice perspective. Current Psychiatry Reports, 19(10), 1-10. https://doi.org/10.1007/s11920-017-0780-z </li>
       
 3. Ide solusi yang diusulkan beserta rancangan fitur
    <br/><b>Solusi</b>
@@ -41,3 +41,10 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    <li>Pemantauan dan dukungan terkait Kesehatan mental</li>
    <li>Akses chatbot dengan resource fokus pada mental health</li>
    </ul>
+
+   <b>Rancangan Fitur Solusi</b>
+   ![image](https://github.com/user-attachments/assets/4a3a6593-eb9d-4241-a86f-d5acf1e4207c)
+
+4. Analisis Kompetitor
+   
+
