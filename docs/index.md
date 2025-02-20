@@ -42,7 +42,7 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    <li>Akses chatbot dengan resource fokus pada mental health</li>
    </ul>
 
-   <b>Rancangan Fitur Solusi</b>
+   <b>Rancangan Fitur Solusi</b><br/>
    ![image](https://github.com/user-attachments/assets/4a3a6593-eb9d-4241-a86f-d5acf1e4207c)
 
 4. Analisis Kompetitor
