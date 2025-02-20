@@ -56,7 +56,7 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
 ## Modul 2 (SDLC)
 1. Metodologi SDLC<br>
    <b>Metodologi yang digunakan:<b><br>
-   Kanban 
+   Kanban<br> 
    <b>Alasan pemilihan metodologi:<b><br>
    <ul>
    <li>Fleksibilitas dengan Akademik</li>
@@ -79,4 +79,35 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
       </ul>
    <li>Tidak memerlukan banyak ceremonial meetings seperti Scrum</li>
    </ul>
+2. Perancangan Tahap 1-3 SDLC<br>
+   <b>Tujuan dari produk</b><br>
+   <ul>
+      <li>Membantu pengguna dalam melacak kondisi mental mereka secara rutin melalui asesmen</li> 
+      <li>Menyediakan chatbot yang dapat memberikan informasi dan rujukan ke layanan profesional </li>
+   </ul>
+   <b>Pengguna potensial dari produk dan kebutuhan para pengguna</b><br>
+   <ul>
+      <li>Mahasiswa, pekerja, atau kelompok yang sering mengalami tekanan akademik atau pekerjaan yang tinggi dan memerlukan dukungan mental.</li>
+      <li>Individu yang tertarik atau peduli terhadap kesehatan mental</li>
+   </ul>
+   
+   <b>Use case diagram </b><br>
+   ![image](https://github.com/user-attachments/assets/a0bac969-5c07-4dc3-ba79-720af7cdcaa7)
+   
+   <b>Functional requirements untuk use case yang telah dirancang</b><br>
+   ![image](https://github.com/user-attachments/assets/30d1f1b4-e744-407c-b26b-cb9727f978d0)
+
+   <b>Entity relationship diagram</b><br>
+   ![image](https://github.com/user-attachments/assets/3a2fb5b4-0e8a-4e80-89ba-903609e60031)
+
+   <b>Low-fidelity Wireframe</b><br>
+   ![Frame 1](https://github.com/user-attachments/assets/d3f8621f-87b5-41e7-b3f4-b3479eea9b4e)
+   ![Frame 2](https://github.com/user-attachments/assets/a582224f-3b31-4135-aceb-52d676d6d38b)
+   ![Frame 3](https://github.com/user-attachments/assets/d5f361b6-8267-41ac-b152-93fb690f3e5e)
+   ![Frame 4](https://github.com/user-attachments/assets/a25b0e54-275e-424a-8807-73e00e14d054)
+
+   <b>Gantt-Chart pengerjaan proyek</b><br>
+   ![image](https://github.com/user-attachments/assets/7dc1c950-7c29-4924-8b68-d66c73f516bb)
+
+
 
