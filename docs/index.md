@@ -1,6 +1,6 @@
 # WarasIn
 Platform Kesehatan mental support yang berfokus pada AI untuk menyediakan Deteksi dini masalah Kesehatan mental, Pemantauan dan dukungan terkait Kesehatan mental, dan Akses chatbot dengan resource fokus pada mental health.<br>
-[Kelompok](#kelompok-mental-tech) • [Project](#project) • [Instansi](#instansi) • [Modul 1](#modul-1)
+[Kelompok](#kelompok-mental-tech) • [Project](#project) • [Instansi](#instansi) • [Modul 1](#modul-1) • [Modul 2 (SDLC)](#modul-2-(sdlc))
 
 ## Kelompok Mental Tech
 1. Ketua Kelompok: Habib Fabian Fahlesi-22/505501/TK/55319
@@ -53,7 +53,10 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
 5. Lean Canvas
    <br/>![Learn Canvas WarasIn-1](https://github.com/user-attachments/assets/82875563-bb83-4469-b44c-2a709d74f17e)
 
-
+## Modul 2 (SDLC)
+1. Metodologi SDLC<br>
+   <b>Metodologi yang digunakan:<b><br>
+   Kanban 
 
    
 
