@@ -10,4 +10,9 @@ Platform Kesehatan mental support yang berfokus pada AI untuk menyediakan Deteks
 Project Senior Project TI
 
 ## Instansi 
-Departemen Teknik Elektro dan Teknologi Informasi
+Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas Gadjah Mada
+
+## Modul 1
+1. Nama Produk
+   <b>WarasIn</b>
+2. Permasalahan yang dipecahkan
