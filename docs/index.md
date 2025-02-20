@@ -26,12 +26,9 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
    
    <br/><b>Rumusan Permasalahan</b>
    <br/><ul>
-   <li>Apa solusi yang dapat diterapkan untuk meningkatkan akses masyarakat
-terhadap layanan kesehatan mental di Indonesia?
-</li>
-<li>Bagaimana pemanfaatan teknologi dapat membantu deteksi dini masalah
+   <ol>Apa solusi yang dapat diterapkan untuk meningkatkan akses masyarakat terhadap layanan kesehatan mental di Indonesia?</ol><ol>Bagaimana pemanfaatan teknologi dapat membantu deteksi dini masalah
 kesehatan mental?
-</li>
+</ol>
    </ul>
 
    <br/><b>Daftar Pustaka</b>
