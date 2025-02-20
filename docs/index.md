@@ -57,6 +57,26 @@ Departemen Teknik Elektro dan Teknologi Informasi,Fakultas Teknik, Universitas G
 1. Metodologi SDLC<br>
    <b>Metodologi yang digunakan:<b><br>
    Kanban 
-
+   <b>Alasan pemilihan metodologi:<b><br>
+   <ul>
+   <li>Fleksibilitas dengan Akademik</li>
+      <ul>
+         <li>Pengerjaan dengan metode kanban fleksibel sesuai kapasitas tim di Tengah kesibukan perkuliahan.</li>
+         <li>   Tidak ada time-boxing ketat seperti Scrum, tim bisa adjust workload sesuai jadwal akademik.</li>
+      </ul>   
+   <li>Visualisasi Workflow</li> 
+      <ul>
+         <li>Board Kanban memvisualisasikan semua task dan progressnya</li>
+         <li>Memudahkan tracking pekerjaan parallel (backend, frontend, AI)</li>
+         <li>Tim bisa dengan cepat melihat bottlenecks dan adjust kapasitas</li>
+      </ul>  
    
+   <li>Minimalisasi Overhead</li>
+      <ul>
+         <li>Tidak memerlukan banyak ceremonial meetings seperti Scrum </li>
+         <li>Focus pada delivering value vs managing process</li>
+         <li>Cocok untuk tim kecil dengan jadwal berbeda</li>
+      </ul>
+   <li>Tidak memerlukan banyak ceremonial meetings seperti Scrum</li>
+   </ul>
 
