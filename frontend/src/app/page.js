@@ -86,9 +86,9 @@ export default function Home() {
                   height={400}
                   className="relative z-10"
                 />
-                <div className="absolute top-4 right-4 bg-purple-700 text-white p-2 rounded-full">
+                {/* <div className="absolute top-4 right-4 bg-purple-700 text-white p-2 rounded-full">
                   <Phone className="h-5 w-5" />
-                </div>
+                </div> */}
                 <div className="absolute bottom-10 left-0 bg-orange-200 h-3 w-3 rounded-full"></div>
                 <div className="absolute top-10 right-0 bg-orange-200 h-3 w-3 rounded-full"></div>
               </div>
@@ -221,12 +221,12 @@ export default function Home() {
                 </CardFooter>
               </Card>
 
-              <Card className="border-0 bg-blue-500 text-white">
+              <Card className="border-0 hover:bg-blue-500 text-black">
                 <CardHeader className="text-center">
                   <h3 className="font-bold">Premium</h3>
                   <div className="text-3xl font-bold">
                     $99.99
-                    <span className="text-sm font-normal text-blue-100">
+                    <span className="text-sm font-normal text-black">
                       /month
                     </span>
                   </div>
