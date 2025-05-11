@@ -1,27 +1,68 @@
+version: '3'
+
 services:
   goapp:
-    container_name: goapp
-    image: goapp:1.0.0
+    container_name: warasin-api
+    image: warasin-api:1.0.0
     build:
       context: ./backend
       dockerfile: go.dockerfile
     environment:
-      DATABASE_URL: 'postgres://postgres:postgres@db:5432/postgres?sslmode=disable'
+      APP_NAME: WarasIn
+      ENVIRONMENT: development
+      PORT: 8080
+      DATABASE_URL: 'postgres://postgres:postgres@db:5432/warasin?sslmode=disable'
+      JWT_SECRET: your-jwt-secret-key
     ports:
-      - "8000:8000"
+      - "8080:8080"
     depends_on:
       - db
+    networks:
+      - warasin-network
+    restart: unless-stopped
+
   db:
-    container_name: db
-    image: postgres:13
+    container_name: warasin-postgres
+    image: postgres:15-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: warasin
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - warasin-network
+    restart: unless-stopped
+
+  # For database migrations
+  migrate:
+    image: migrate/migrate
+    depends_on:
+      - db
+    volumes:
+      - ./backend/migrations:/migrations
+    command: ["-path", "/migrations", "-database", "postgres://postgres:postgres@db:5432/warasin?sslmode=disable", "up"]
+    networks:
+      - warasin-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: warasin-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - goapp
+    restart: unless-stopped
+    networks:
+      - warasin-network
 
 volumes:
-  pgdata: {}
+  pgdata:
+
+networks:
+  warasin-network:
+    driver: bridge
