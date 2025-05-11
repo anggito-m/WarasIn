@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"errors"
+	"time"
 
 	"warasin/internal/domain"
 	"warasin/internal/repository/postgres"
@@ -60,4 +61,30 @@ func (u *moodUsecase) Create(userID int, journalID int, entryType, primaryEmotio
 	}
 
 	return u.moodRepo.Create(entry)
+}
+
+func (u *moodUsecase) GetByID(id int, userID int) (*domain.MoodEntry, error) {
+	return u.moodRepo.GetByID(id, userID)
+}
+
+func (u *moodUsecase) GetAll(userID int, limit, offset int, startDateStr, endDateStr, entryType string) ([]*domain.MoodEntry, int, error) {
+	var startDate, endDate time.Time
+
+	if startDateStr != "" {
+		var err error
+		startDate, err = time.Parse(time.RFC3339, startDateStr)
+		if err != nil {
+			return nil, 0, errors.New("invalid start_date format")
+		}
+	}
+
+	if endDateStr != "" {
+		var err error
+		endDate, err = time.Parse(time.RFC3339, endDateStr)
+		if err != nil {
+			return nil, 0, errors.New("invalid end_date format")
+		}
+	}
+
+	return u.moodRepo.GetByUserID(userID, limit, offset, startDate, endDate, entryType)
 }

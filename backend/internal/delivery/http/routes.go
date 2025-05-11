@@ -13,7 +13,6 @@ import (
 // RegisterRoutes registers all API routes
 func RegisterRoutes(
 	router *gin.Engine,
-	cfg *config.Config,
 	userUsecase usecase.UserUsecase,
 	journalUsecase usecase.JournalUsecase,
 	moodUsecase usecase.MoodUsecase,
@@ -22,6 +21,9 @@ func RegisterRoutes(
 	paymentUsecase usecase.PaymentUsecase,
 	activityUsecase usecase.ActivityUsecase,
 ) {
+	// Get configuration
+	cfg := config.New()
+
 	// Initialize JWT service
 	jwtService := auth.NewJWTService(cfg.JWTSecret, cfg.JWTExpiresIn)
 
@@ -41,56 +43,57 @@ func RegisterRoutes(
 	authMiddleware := middleware.AuthMiddleware(jwtService)
 	premiumMiddleware := middleware.RequireUserType("premium")
 
+	// Activity logging middleware - corrected
+	logActivityMiddleware := handler.LogUserActivity(activityUsecase)
+
 	// User routes
 	users := v1.Group("/users")
 	{
 		users.POST("/register", userHandler.Register)
-		users.POST("/login", userHandler.Login)
+		users.POST("/login", userHandler.Login, logActivityMiddleware) // Log login activity
 
 		// Protected routes
 		profile := users.Group("/profile").Use(authMiddleware)
 		{
 			profile.GET("", userHandler.GetProfile)
-			profile.PATCH("", userHandler.UpdateProfile)
+			profile.PATCH("", userHandler.UpdateProfile, logActivityMiddleware)
 		}
 
 		// Password change
-		users.POST("/change-password", authMiddleware, userHandler.ChangePassword)
+		users.POST("/change-password", authMiddleware, userHandler.ChangePassword, logActivityMiddleware)
 	}
 
 	// Journal routes
 	journal := v1.Group("/journal").Use(authMiddleware)
 	{
-		journal.POST("", journalHandler.Create)
+		journal.POST("", journalHandler.Create, logActivityMiddleware)
 		journal.GET("", journalHandler.GetAll)
 		journal.GET("/:journal_id", journalHandler.GetByID)
-		journal.PATCH("/:journal_id", journalHandler.Update)
-		journal.DELETE("/:journal_id", journalHandler.Delete)
+		journal.PATCH("/:journal_id", journalHandler.Update, logActivityMiddleware)
+		journal.DELETE("/:journal_id", journalHandler.Delete, logActivityMiddleware)
 	}
 
 	// Mood routes
 	mood := v1.Group("/mood").Use(authMiddleware)
 	{
-		mood.POST("", moodHandler.Create)
+		mood.POST("", moodHandler.Create, logActivityMiddleware)
 		mood.GET("", moodHandler.GetAll)
 		mood.GET("/:entry_id", moodHandler.GetByID)
 	}
 
-	// Chat routes
-	chat := v1.Group("/chat").Use(authMiddleware)
+	// Chat routes - Fixed structure to avoid unused variable
+	sessions := v1.Group("/chat/sessions").Use(authMiddleware)
 	{
-		sessions := chat.Group("/sessions")
-		{
-			sessions.POST("", chatHandler.StartSession)
-			sessions.PATCH("/:session_id", chatHandler.EndSession)
-			sessions.GET("", chatHandler.GetSessions)
+		sessions.POST("", chatHandler.StartSession, logActivityMiddleware)
+		sessions.PATCH("/:session_id", chatHandler.EndSession, logActivityMiddleware)
+		sessions.GET("", chatHandler.GetSessions)
+	}
 
-			messages := sessions.Group("/:session_id/messages")
-			{
-				messages.POST("", chatHandler.SendMessage)
-				messages.GET("", chatHandler.GetMessages)
-			}
-		}
+	// Chat messages routes
+	messages := v1.Group("/chat/sessions/:session_id/messages").Use(authMiddleware)
+	{
+		messages.POST("", chatHandler.SendMessage, logActivityMiddleware)
+		messages.GET("", chatHandler.GetMessages)
 	}
 
 	// Resource routes
@@ -99,25 +102,25 @@ func RegisterRoutes(
 		// Public resources
 		resources.GET("", resourceHandler.GetResources)
 		resources.GET("/:resource_id", resourceHandler.GetResourceDetails)
+	}
 
-		// Protected routes
-		resourceAuth := resources.Group("").Use(authMiddleware)
-		{
-			resourceAuth.POST("/:resource_id/interactions", resourceHandler.CreateInteraction)
-			resourceAuth.GET("/:resource_id/interactions", resourceHandler.GetInteractions)
-		}
+	// Protected resource routes
+	resourceAuth := v1.Group("/resources").Use(authMiddleware)
+	{
+		resourceAuth.POST("/:resource_id/interactions", resourceHandler.CreateInteraction, logActivityMiddleware)
+		resourceAuth.GET("/:resource_id/interactions", resourceHandler.GetInteractions)
+	}
 
-		// Premium resources
-		resourcePremium := resources.Group("/premium").Use(authMiddleware, premiumMiddleware)
-		{
-			resourcePremium.GET("", resourceHandler.GetPremiumResources)
-		}
+	// Premium resources
+	resourcePremium := v1.Group("/resources/premium").Use(authMiddleware, premiumMiddleware)
+	{
+		resourcePremium.GET("", resourceHandler.GetPremiumResources)
 	}
 
 	// Payment routes
 	payments := v1.Group("/payments").Use(authMiddleware)
 	{
-		payments.POST("", paymentHandler.CreatePayment)
+		payments.POST("", paymentHandler.CreatePayment, logActivityMiddleware)
 		payments.GET("", paymentHandler.GetPaymentHistory)
 	}
 

@@ -49,10 +49,10 @@ func main() {
 	// Initialize use cases
 	userUsecase := usecase.NewUserUsecase(userRepo)
 	journalUsecase := usecase.NewJournalUsecase(journalRepo)
-	moodUsecase := usecase.NewMoodUsecase(moodRepo)
+	moodUsecase := usecase.NewMoodUsecase(moodRepo, journalRepo) // Add journalRepo
 	chatUsecase := usecase.NewChatUsecase(chatRepo)
 	resourceUsecase := usecase.NewResourceUsecase(resourceRepo)
-	paymentUsecase := usecase.NewPaymentUsecase(paymentRepo)
+	paymentUsecase := usecase.NewPaymentUsecase(paymentRepo, userRepo) // Add userRepo
 	activityUsecase := usecase.NewActivityUsecase(activityRepo)
 
 	// Initialize router
