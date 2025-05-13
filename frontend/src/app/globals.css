@@ -29,6 +29,9 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --swiper-pagination-color: #000000; /* Blue-500 */
+    --swiper-pagination-bullet-size: 10px;
+    --swiper-pagination-bullet-horizontal-gap: 4px;
   }
 
   .dark {
@@ -66,4 +69,50 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.my-swiper .swiper-slide {
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 0.3; /* Ubah dari 0.3 agar lebih terlihat */
+  transform: scale(0.9);
+}
+
+.my-swiper .swiper-slide.swiper-slide-active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.my-swiper .swiper-slide-next,
+.my-swiper .swiper-slide-prev {
+  opacity: 0.7;
+  transform: scale(0.9);
+}
+
+/* In your global CSS or module */
+.my-swiper {
+  position: relative; /* Ensure pagination is relative to Swiper */
+  padding-bottom: 4px; /* Space for pagination */
+}
+
+.swiper-pagination {
+  position: absolute;
+  bottom: 0px !important;
+  width: 100%;
+  /* display: flex;
+  justify-content: center;*/
+  gap: 8px; /*Space between dots */
+}
+
+.swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: #ccc;
+  border-radius: 10%;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+  background: #000;
+  opacity: 1;
 }
