@@ -11,6 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import {
   Smile,
@@ -49,7 +50,7 @@ const menuItems = [
   },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({ ...props }) {
   const pathname = usePathname();
   const router = useRouter();
   // Fungsi untuk menentukan item aktif dengan lebih akurat
@@ -76,7 +77,11 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar className="w-64 bg-muted bg-blue-600 text-white">
+    <Sidebar
+      className="w-64 bg-muted bg-blue-600 text-white"
+      collapsible="icon"
+      {...props}
+    >
       <SidebarContent>
         <div className="p-4 flex justify-center items-center">
           <Image
@@ -130,6 +135,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </div>
+      <SidebarRail />
     </Sidebar>
   );
 }

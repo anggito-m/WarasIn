@@ -23,6 +23,7 @@ export default function ArticlePage({ params }) {
     author: "Jessica Kim",
     date: "02 December 2022",
     readTime: "3 Min To Read",
+    image: "/kesehatan-mental.jpg",
     content: [
       {
         type: "paragraph",
@@ -151,7 +152,7 @@ export default function ArticlePage({ params }) {
             {/* Back button */}
             <div className="mb-6">
               <Link
-                href="/"
+                href="/main"
                 className="inline-flex items-center text-blue-500 hover:text-blue-700"
               >
                 <ChevronLeft className="mr-1 h-4 w-4" />
@@ -188,7 +189,14 @@ export default function ArticlePage({ params }) {
 
               {/* Article hero image */}
               <div className="mb-8 overflow-hidden rounded-lg">
-                <div className="aspect-video w-full bg-gray-200"></div>
+                <Image
+                  src={article.image}
+                  alt={article.title}
+                  width={800}
+                  height={400}
+                  className="aspect-video w-full bg-gray-200 object-cover"
+                />
+                {/* <div className="aspect-video w-full bg-gray-200"></div> */}
               </div>
 
               {/* Article content */}

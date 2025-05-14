@@ -6,10 +6,8 @@ export default function DashboardLayout({ children }) {
     <div>
       <SidebarProvider>
         <AppSidebar />
-        <main>
-          <SidebarTrigger />
-          {children}
-        </main>
+        <SidebarTrigger />
+        {children}
       </SidebarProvider>
     </div>
   );
