@@ -1,20 +1,16 @@
 import Link from "next/link";
 import { Calendar, Clock } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Image from "next/image";
-export function ArticleCard({ article }) {
+
+export function RelatedArticles({ articles }) {
   return (
-    <div className="grid md:grid-cols-3 gap-3 h-full">
-      {/* Konten Artikel */}
-      <div className="md:col-span-2 h-full">
-        <div className="article-card h-full">
+    <div className="grid gap-6 md:grid-cols-2">
+      {articles.map((article) => (
+        <div key={article.id} className="article-card">
           <div className="article-card-accent"></div>
           <div className="p-6">
-            <div className="mb-2">
-              <span className="article-tag">NEW</span>
-            </div>
-            <Link href={`/main/article/${article.id}`} className="group">
-              <h3 className="mb-2 text-xl font-bold group-hover:text-blue-500">
+            <Link href={`/article/${article.id}`} className="group">
+              <h3 className="mb-2 text-lg font-bold group-hover:text-blue-500">
                 {article.title}
               </h3>
             </Link>
@@ -38,18 +34,7 @@ export function ArticleCard({ article }) {
             <p className="text-muted-foreground">{article.excerpt}</p>
           </div>
         </div>
-      </div>
-      <div className="article-card h-full">
-        <Image
-          src={article.image}
-          alt={article.title}
-          width={400}
-          height={300}
-          className="object-cover w-full h-full rounded-lg"
-          style={{ height: "100%", minHeight: "300px" }}
-        />
-        {/* <div className="h-full bg-gray-200"></div> */}
-      </div>
+      ))}
     </div>
   );
 }
