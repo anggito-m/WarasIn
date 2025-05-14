@@ -32,6 +32,26 @@
     --swiper-pagination-color: #000000; /* Blue-500 */
     --swiper-pagination-bullet-size: 10px;
     --swiper-pagination-bullet-horizontal-gap: 4px;
+    --sidebar-bg: 222 83% 55%;
+    --sidebar-hover: 222 83% 50%;
+    --sidebar-active: 222 83% 45%;
+    --sidebar-text: 0 0% 100%;
+    --sidebar-background: 222 83% 55%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%; */
   }
 
   .dark {
@@ -59,6 +79,27 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --sidebar-bg: 222 83% 35%;
+    --sidebar-hover: 222 83% 30%;
+    --sidebar-active: 222 83% 25%;
+    --sidebar-text: 0 0% 100%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* 
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%; */
   }
 }
 
@@ -115,4 +156,48 @@
 .swiper-pagination-bullet-active {
   background: #000;
   opacity: 1;
+}
+
+.sidebar {
+  background-image: linear-gradient(
+    to bottom,
+    hsl(222 83% 35%),
+    hsl(222 83% 55%)
+  ) !important;
+  color: hsl(var(--sidebar-text));
+
+  /* background-color: hsl(var(--sidebar-bg));
+  color: hsl(var(--sidebar-text)); */
+}
+
+.sidebar-item {
+  @apply flex items-center gap-3 px-4 py-3 text-white rounded-md transition-colors;
+}
+
+.sidebar-item:hover {
+  background-color: hsl(var(--sidebar-hover));
+}
+
+.sidebar-item.active {
+  background-color: hsl(var(--sidebar-active));
+}
+
+.article-card {
+  @apply relative overflow-hidden rounded-lg border bg-background;
+}
+
+.article-card-accent {
+  @apply absolute top-0 left-0 h-1 w-16 bg-blue-500;
+}
+
+.article-tag {
+  @apply inline-flex items-center rounded-md bg-blue-100 px-2 py-1 text-xs font-medium text-blue-700;
+}
+
+.article-meta {
+  @apply flex items-center gap-4 text-sm text-muted-foreground;
+}
+
+.article-meta-item {
+  @apply flex items-center gap-1;
 }

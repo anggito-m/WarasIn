@@ -18,14 +18,9 @@ export const Footer = () => {
               <Image
                 src="/logo.svg"
                 alt="Warasio Logo"
-                width={40}
-                height={40}
-                className="h-10 w-10"
+                width={140}
+                height={140}
               />
-              <span className="text-blue-500 font-bold text-xl">Warasio</span>
-              <div className="relative">
-                <div className="absolute -top-1 -right-4 h-3 w-3 rounded-full bg-blue-500"></div>
-              </div>
             </div>
             <p className="text-gray-500 mb-4">
               Lorem ipsum dolor sit amet consectetur adipiscing elit
