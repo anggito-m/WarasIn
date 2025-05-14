@@ -12,6 +12,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarRail,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import {
   Smile,
@@ -121,7 +122,7 @@ export function AppSidebar({ ...props }) {
         </SidebarGroup>
       </SidebarContent>
       <div className="p-4 border-t border-blue-500">
-        <SidebarMenu>
+        <SidebarFooter>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <button
@@ -133,7 +134,7 @@ export function AppSidebar({ ...props }) {
               </button>
             </SidebarMenuButton>
           </SidebarMenuItem>
-        </SidebarMenu>
+        </SidebarFooter>
       </div>
       <SidebarRail />
     </Sidebar>

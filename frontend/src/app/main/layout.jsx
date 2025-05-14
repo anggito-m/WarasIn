@@ -6,7 +6,7 @@ export default function DashboardLayout({ children }) {
     <div>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarTrigger />
+        <SidebarTrigger className="scale-150 fill-blue-600" />
         {children}
       </SidebarProvider>
     </div>
