@@ -29,6 +29,8 @@ import {
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import bcrypt from "bcryptjs"; // or 'bcrypt' if using Node.js bcrypt
+import users from "@/data/user.json";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -53,28 +55,16 @@ export default function AuthPage() {
     agreeTerms: false,
   });
 
-  // Form validation
+  // Form validation (unchanged)
   const validateLoginForm = () => {
-    if (!loginForm.email) return "Email is required";
-    if (!loginForm.password) return "Password is required";
-    return null;
+    /* ... */
   };
-
   const validateSignupForm = () => {
-    if (!signupForm.name) return "Name is required";
-    if (!signupForm.email) return "Email is required";
-    if (!signupForm.password) return "Password is required";
-    if (signupForm.password.length < 8)
-      return "Password must be at least 8 characters";
-    if (signupForm.password !== signupForm.confirmPassword)
-      return "Passwords do not match";
-    if (!signupForm.agreeTerms)
-      return "You must agree to the terms and conditions";
-    return null;
+    /* ... */
   };
 
-  // Handle login
-  const handleLogin = (e) => {
+  // Handle login with bcrypt verification
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -87,20 +77,39 @@ export default function AuthPage() {
 
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Simulate API call - Find user in your JSON data
+      const user = users.find((u) => u.email === loginForm.email);
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      // Verify password with bcrypt
+      const isMatch = await bcrypt.compare(loginForm.password, user.password);
+
+      if (!isMatch) {
+        throw new Error("Invalid credentials");
+      }
+
       setSuccess("Login successful! Redirecting...");
 
-      // Simulate redirect after successful login
+      // In a real app, you would:
+      // 1. Set auth token in cookies/localStorage
+      // 2. Set user context
+      // 3. Redirect
       setTimeout(() => {
         router.push("/main");
       }, 1500);
-    }, 2000);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Handle signup
-  const handleSignup = (e) => {
+  // Handle signup with password hashing
+  const handleSignup = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -113,9 +122,28 @@ export default function AuthPage() {
 
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+    try {
+      // Check if user already exists
+      const userExists = users.some((u) => u.email === signupForm.email);
+      if (userExists) {
+        throw new Error("Email already registered");
+      }
+
+      // Hash password with bcrypt
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(signupForm.password, salt);
+
+      // In a real app, you would:
+      // 1. Send to backend API
+      // 2. The backend would save to database
+      // For simulation, we'll just log it
+      console.log("New user would be created with:", {
+        name: signupForm.name,
+        email: signupForm.email,
+        password: hashedPassword, // Never store plaintext!
+        createdAt: new Date().toISOString(),
+      });
+
       setSuccess("Account created successfully! You can now log in.");
 
       // Reset form and switch to login tab
@@ -131,7 +159,11 @@ export default function AuthPage() {
         setActiveTab("login");
         setSuccess(null);
       }, 2000);
-    }, 2000);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // Handle Google login
@@ -171,6 +203,147 @@ export default function AuthPage() {
       setSuccess("Password reset link sent to your email!");
     }, 2000);
   };
+
+  // const router = useRouter();
+  // const [activeTab, setActiveTab] = useState("login");
+  // const [showPassword, setShowPassword] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [error, setError] = useState(null);
+  // const [success, setSuccess] = useState(null);
+
+  // // Form states
+  // const [loginForm, setLoginForm] = useState({
+  //   email: "",
+  //   password: "",
+  //   rememberMe: false,
+  // });
+
+  // const [signupForm, setSignupForm] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  //   confirmPassword: "",
+  //   agreeTerms: false,
+  // });
+
+  // // Form validation
+  // const validateLoginForm = () => {
+  //   if (!loginForm.email) return "Email is required";
+  //   if (!loginForm.password) return "Password is required";
+  //   return null;
+  // };
+
+  // const validateSignupForm = () => {
+  //   if (!signupForm.name) return "Name is required";
+  //   if (!signupForm.email) return "Email is required";
+  //   if (!signupForm.password) return "Password is required";
+  //   if (signupForm.password.length < 8)
+  //     return "Password must be at least 8 characters";
+  //   if (signupForm.password !== signupForm.confirmPassword)
+  //     return "Passwords do not match";
+  //   if (!signupForm.agreeTerms)
+  //     return "You must agree to the terms and conditions";
+  //   return null;
+  // };
+
+  // // Handle login
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
+  //   setError(null);
+  //   setSuccess(null);
+
+  //   const validationError = validateLoginForm();
+  //   if (validationError) {
+  //     setError(validationError);
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+
+  //   // Simulate API call
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //     setSuccess("Login successful! Redirecting...");
+
+  //     // Simulate redirect after successful login
+  //     setTimeout(() => {
+  //       router.push("/main");
+  //     }, 1500);
+  //   }, 2000);
+  // };
+
+  // // Handle signup
+  // const handleSignup = (e) => {
+  //   e.preventDefault();
+  //   setError(null);
+  //   setSuccess(null);
+
+  //   const validationError = validateSignupForm();
+  //   if (validationError) {
+  //     setError(validationError);
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+
+  //   // Simulate API call
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //     setSuccess("Account created successfully! You can now log in.");
+
+  //     // Reset form and switch to login tab
+  //     setSignupForm({
+  //       name: "",
+  //       email: "",
+  //       password: "",
+  //       confirmPassword: "",
+  //       agreeTerms: false,
+  //     });
+
+  //     setTimeout(() => {
+  //       setActiveTab("login");
+  //       setSuccess(null);
+  //     }, 2000);
+  //   }, 2000);
+  // };
+
+  // // Handle Google login
+  // const handleGoogleLogin = () => {
+  //   setError(null);
+  //   setSuccess(null);
+  //   setIsLoading(true);
+
+  //   // Simulate Google OAuth
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //     setSuccess("Google login successful! Redirecting...");
+
+  //     // Simulate redirect after successful login
+  //     setTimeout(() => {
+  //       router.push("/main");
+  //     }, 1500);
+  //   }, 2000);
+  // };
+
+  // // Handle forgot password
+  // const handleForgotPassword = (e) => {
+  //   e.preventDefault();
+  //   setError(null);
+  //   setSuccess(null);
+
+  //   if (!loginForm.email) {
+  //     setError("Please enter your email address");
+  //     return;
+  //   }
+
+  //   setIsLoading(true);
+
+  //   // Simulate API call
+  //   setTimeout(() => {
+  //     setIsLoading(false);
+  //     setSuccess("Password reset link sent to your email!");
+  //   }, 2000);
+  // };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
