@@ -94,7 +94,7 @@ export default function AuthPage() {
 
       // Simulate redirect after successful login
       setTimeout(() => {
-        router.push("/");
+        router.push("/main");
       }, 1500);
     }, 2000);
   };
