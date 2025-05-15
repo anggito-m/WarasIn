@@ -41,7 +41,9 @@ export const Navigation = () => {
             About Us
           </Link>
         </nav>
-        <Button className="bg-blue-500 hover:bg-blue-600">Log In</Button>
+        <Link href="/auth">
+          <Button className="bg-blue-500 hover:bg-blue-600">Log In</Button>
+        </Link>
       </div>
     </header>
   );
