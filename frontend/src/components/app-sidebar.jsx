@@ -21,6 +21,7 @@ import {
   Share2,
   BarChart2,
   LogOut,
+  Camera,
 } from "lucide-react";
 
 const menuItems = [
@@ -38,6 +39,12 @@ const menuItems = [
     url: "/main/smart-journal",
   },
   {
+    id: "facial-recognition",
+    label: "Facial Expression Recognition",
+    icon: Camera,
+    url: "/main/facial-recognition",
+  },
+  {
     id: "anonym-chatbot",
     label: "Anonym Chatbot",
     icon: MessageSquare,
@@ -45,7 +52,7 @@ const menuItems = [
   },
   {
     id: "monitoring",
-    label: "Monitoring, report, & Visualization",
+    label: "Monitoring & Report",
     icon: BarChart2,
     url: "/main/monitoring",
   },
