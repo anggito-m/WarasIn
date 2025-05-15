@@ -94,10 +94,6 @@ export default function AuthPage() {
 
       setSuccess("Login successful! Redirecting...");
 
-      // In a real app, you would:
-      // 1. Set auth token in cookies/localStorage
-      // 2. Set user context
-      // 3. Redirect
       setTimeout(() => {
         router.push("/main");
       }, 1500);
@@ -133,10 +129,6 @@ export default function AuthPage() {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(signupForm.password, salt);
 
-      // In a real app, you would:
-      // 1. Send to backend API
-      // 2. The backend would save to database
-      // For simulation, we'll just log it
       console.log("New user would be created with:", {
         name: signupForm.name,
         email: signupForm.email,
