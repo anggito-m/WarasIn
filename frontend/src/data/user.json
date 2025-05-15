@@ -1,0 +1,43 @@
+[
+  {
+    "id": "user_01h9e2z5w7x8y3v4u6",
+    "email": "user@example.com",
+    "password": "$2a$10$XlzY7q3VpzQ1VbJNQ5Zs.e6r9X1wY2Z1Z2Z3Z4Z5Z6Z7Z8Z9Z0Z1Z2",
+    "name": "John Doe",
+    "role": "user",
+    "createdAt": "2023-07-15T08:23:41Z",
+    "lastLogin": "2023-10-22T14:35:12Z",
+    "profile": {
+      "avatar": "/avatars/default.jpg",
+      "bio": "Mental health advocate",
+      "interests": ["mindfulness", "therapy", "self-care"]
+    }
+  },
+  {
+    "id": "user_02h9e2z5w7x8y3v4u6",
+    "email": "therapist@example.com",
+    "password": "$2a$10$AbCdEfGhIjKlMnOpQrStUvWxYz0123456789abcdefghijkl",
+    "name": "Dr. Sarah Smith",
+    "role": "therapist",
+    "createdAt": "2023-05-10T10:15:30Z",
+    "lastLogin": "2023-10-23T09:12:45Z",
+    "profile": {
+      "avatar": "/avatars/therapist.jpg",
+      "bio": "Licensed clinical psychologist",
+      "specialties": ["CBT", "Anxiety", "Depression"]
+    }
+  },
+  {
+    "id": "user_03h9e2z5w7x8y3v4u6",
+    "email": "admin@warasin.com",
+    "password": "$2a$10$ZyXwVuTsRqPoNiUlVrQcE.1q2w3e4r5t6y7u8i9o0p1a2s3d4f5g6",
+    "name": "Admin User",
+    "role": "admin",
+    "createdAt": "2023-01-20T12:00:00Z",
+    "lastLogin": "2023-10-24T08:45:22Z",
+    "profile": {
+      "avatar": "/avatars/admin.jpg",
+      "permissions": ["manage_users", "view_reports"]
+    }
+  }
+]
