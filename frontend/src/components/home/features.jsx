@@ -40,7 +40,7 @@ export function Features() {
       icon: <BookOpen className="h-8 w-8 text-red-500" />,
       bgColor: "bg-red-100",
       title: "Smart Journal",
-      desc: "Get all the nutritional values of your preferred dish.",
+      desc: "Write your daily journal and get insights.",
     },
     {
       icon: <BarChart2 className="h-8 w-8 text-green-500" />,
@@ -70,7 +70,7 @@ export function Features() {
             slidesPerView={3}
             centeredSlides={true} // Tambahkan ini
             breakpoints={{
-              640: { slidesPerView: 3 },
+              640: { slidesPerView: 1 },
               768: { slidesPerView: 3 },
             }}
             autoplay={{
@@ -87,7 +87,7 @@ export function Features() {
           >
             {features.map((feature, idx) => (
               <SwiperSlide key={idx}>
-                <div className="text-center p-4 border rounded-lg hover:shadow-md transition-shadow duration-300">
+                <div className="text-center px-4 pt-8 pb-32 border rounded-lg hover:shadow-md transition-shadow duration-300">
                   <div
                     className={`h-16 w-16 rounded-lg flex items-center justify-center mx-auto mb-4 ${feature.bgColor}`}
                   >

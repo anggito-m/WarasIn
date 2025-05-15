@@ -6,53 +6,10 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ArticleCard } from "@/components/article-card";
 import { Footer } from "@/components/footer";
+import { fetchArticles } from "utils/article";
 
+const articles = await fetchArticles();
 export default function Home() {
-  const articles = [
-    {
-      id: 1,
-      title:
-        "I Created A Developer Rap Video - Here's What I Learned From It. Check It Out",
-      author: "Jessica Kim",
-      date: "02 December 2022",
-      readTime: "3 Min To Read",
-      excerpt:
-        "Dynamically underwhelm integrated outsourcing via timely models. Rapidiously reconceptualize visionary imperatives without 24/365 catalysts for change. Completely streamline functionalized models.",
-      image: "/kesehatan-mental.jpg",
-    },
-    {
-      id: 2,
-      title: "I Created A Developer Rap",
-      author: "Jessica Kim",
-      date: "02 December 2022",
-      readTime: "3 Min To Read",
-      excerpt:
-        "Dynamically underwhelm integrated outsourcing via timely models. Rapidiously reconceptualize visionary imperatives without 24/365 catalysts for change. Completely streamline functionalized models.",
-      image: "/kesehatan-mental.jpg",
-    },
-    {
-      id: 3,
-      title: "I Created A Developer Rap Video - Here's What I Learned",
-      author: "Jessica Kim",
-      date: "02 December 2022",
-      readTime: "3 Min To Read",
-      excerpt:
-        "Dynamically underwhelm integrated outsourcing via timely models. Rapidiously reconceptualize visionary imperatives without 24/365 catalysts for change. Completely streamline functionalized models.",
-      image: "/kesehatan-mental.jpg",
-    },
-    {
-      id: 4,
-      title:
-        "I Created A Developer Rap Video - Here's What I Learned From It. Check It Out",
-      author: "Jessica Kim",
-      date: "02 December 2022",
-      readTime: "3 Min To Read",
-      excerpt:
-        "Dynamically underwhelm integrated outsourcing via timely models. Rapidiously reconceptualize visionary imperatives without 24/365 catalysts for change. Completely streamline functionalized models.",
-      image: "/kesehatan-mental.jpg",
-    },
-  ];
-
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex flex-1">

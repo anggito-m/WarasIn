@@ -21,7 +21,7 @@ export function Pricing({ packages = [] }) {
           {packages.map((pkg, index) => (
             <Card
               key={index}
-              className="min-h-[480px] flex flex-col justify-between border-2 transition-colors duration-300 group hover:bg-blue-500 hover:border-0 text-black"
+              className="min-h-[480px] flex flex-col justify-between border-2 transition-all duration-300 group hover:bg-gradient-to-r hover:from-gradient-start hover:to-gradient-end hover:border-0 text-black"
             >
               <CardHeader className="text-center">
                 <h3 className="font-bold group-hover:text-white transition-colors">

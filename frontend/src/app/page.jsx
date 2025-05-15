@@ -68,7 +68,7 @@ export default function Home() {
         {/* Pricing Section */}
         <Pricing packages={pricingPackages} />
         {/* Newsletter Section */}
-        <section className="py-16 bg-blue-500 text-white">
+        <section className="py-16 bg-gradient-to-l from-gradient-start to-gradient-end text-white">
           <div className="container mx-auto text-center">
             <h2 className="text-3xl font-bold mb-4">Join To Our Newsletter</h2>
             <p className="max-w-2xl mx-auto mb-8 text-blue-100">
@@ -80,7 +80,8 @@ export default function Home() {
             <div className="flex max-w-md mx-auto">
               <Input
                 placeholder="Your email"
-                className="rounded-r-none bg-white/20 border-0 text-white placeholder:text-blue-100"
+                className="rounded-r-none bg-white/20 border-0 text-white placeholder:text-blue-100 
+            focus:bg-white/80 focus:text-black focus:placeholder:text-gray-400 transition-colors duration-200"
               />
               <Button className="rounded-l-none bg-orange-500 hover:bg-orange-600">
                 Subscribe Us

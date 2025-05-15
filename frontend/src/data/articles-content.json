@@ -1,0 +1,274 @@
+[
+  {
+    "id": 1,
+    "title": "5 Cara Sederhana Menjaga Kesehatan Mental di Era Digital",
+    "author": "Dr. Andi Pratama",
+    "date": "15 November 2023",
+    "readTime": "4 Min To Read",
+    "image": "/kesehatan-mental.jpg",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "Di era digital yang serba cepat ini, kesehatan mental seringkali terabaikan. Banyak orang mengalami stres dan kecemasan akibat tekanan dari media sosial dan tuntutan pekerjaan yang semakin tinggi."
+      },
+      {
+        "type": "paragraph",
+        "text": "Penelitian terbaru menunjukkan bahwa 1 dari 3 orang dewasa mengalami gejala gangguan mental ringan akibat penggunaan teknologi yang berlebihan. Namun kabar baiknya, ada beberapa strategi sederhana yang bisa kita terapkan."
+      },
+      {
+        "type": "heading",
+        "text": "1. Digital Detox Berkala"
+      },
+      {
+        "type": "paragraph",
+        "text": "Sisihkan waktu tanpa gadget setiap hari. Mulailah dengan 30 menit di pagi hari dan 30 menit sebelum tidur. Ini membantu otak untuk beristirahat dari stimulasi berlebihan."
+      },
+      {
+        "type": "image",
+        "src": "/placeholder.svg?height=400&width=800",
+        "alt": "Digital detox illustration",
+        "caption": "Ilustrasi digital detox yang sehat"
+      },
+      {
+        "type": "heading",
+        "text": "2. Membangun Rutinitas Sehat"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Tidur cukup 7-8 jam sehari",
+          "Olahraga ringan 3 kali seminggu",
+          "Makan makanan bergizi seimbang",
+          "Praktikkan mindfulness setiap pagi"
+        ]
+      },
+      {
+        "type": "quote",
+        "text": "Kesehatan mental sama pentingnya dengan kesehatan fisik, keduanya saling mempengaruhi.",
+        "author": "Dr. Andi Pratama"
+      },
+      {
+        "type": "paragraph",
+        "text": "Dengan menerapkan pola hidup seimbang, kita bisa lebih tangguh menghadapi tekanan di era digital ini. Ingatlah bahwa mencari bantuan profesional ketika dibutuhkan adalah tanda kekuatan, bukan kelemahan."
+      }
+    ],
+    "tags": ["Kesehatan Mental", "Era Digital", "Self-Care", "Wellbeing"],
+    "likes": 245,
+    "comments": 42,
+    "shares": 31
+  },
+  {
+    "id": 2,
+    "title": "Mengenal Anxiety Disorder: Gejala dan Penanganannya",
+    "author": "Psikolog Sarah Wijaya",
+    "date": "02 Desember 2023",
+    "readTime": "5 Min To Read",
+    "image": "/kesehatan-mental.jpg",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "Gangguan kecemasan atau anxiety disorder seringkali tidak terdiagnosis karena dianggap sebagai hal yang normal. Padahal kondisi ini bisa sangat mengganggu kualitas hidup jika tidak ditangani dengan tepat."
+      },
+      {
+        "type": "heading",
+        "text": "Gejala Utama Anxiety Disorder"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Rasa cemas berlebihan yang sulit dikontrol",
+          "Gangguan tidur dan nafsu makan",
+          "Detak jantung cepat tanpa sebab fisik",
+          "Sering merasa tegang dan gelisah"
+        ]
+      },
+      {
+        "type": "image",
+        "src": "/placeholder.svg?height=400&width=800",
+        "alt": "Anxiety symptoms illustration",
+        "caption": "Gejala umum gangguan kecemasan"
+      },
+      {
+        "type": "heading",
+        "text": "Penanganan yang Efektif"
+      },
+      {
+        "type": "paragraph",
+        "text": "Terapi kognitif perilaku (CBT) telah terbukti efektif untuk mengatasi anxiety disorder. Terapi ini membantu pasien mengidentifikasi pola pikir negatif dan mengubahnya menjadi lebih rasional."
+      },
+      {
+        "type": "quote",
+        "text": "Kecemasan adalah respons alami tubuh, tapi ketika berlebihan kita perlu belajar mengelolanya.",
+        "author": "Psikolog Sarah Wijaya"
+      },
+      {
+        "type": "paragraph",
+        "text": "Selain terapi, teknik relaksasi seperti pernapasan dalam dan meditasi juga bisa membantu. Dalam kasus tertentu, dokter mungkin akan meresepkan obat untuk membantu mengatasi gejala."
+      }
+    ],
+    "tags": ["Gangguan Kecemasan", "Kesehatan Mental", "Psikologi", "Terapi"],
+    "likes": 312,
+    "comments": 58,
+    "shares": 47
+  },
+  {
+    "id": 3,
+    "title": "Meditasi untuk Pemula: Langkah Awal Menenangkan Pikiran",
+    "author": "Yoga Instructor Budi Santoso",
+    "date": "25 Oktober 2023",
+    "readTime": "3 Min To Read",
+    "image": "/kesehatan-mental.jpg",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "Meditasi adalah praktik kuno yang kini didukung oleh banyak penelitian ilmiah sebagai cara efektif untuk mengurangi stres dan meningkatkan kesehatan mental."
+      },
+      {
+        "type": "heading",
+        "text": "Panduan Meditasi 5 Menit"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Cari tempat tenang dan nyaman",
+          "Duduk dengan punggung tegak",
+          "Fokus pada napas alami",
+          "Arahkan perhatian saat pikiran mengembara",
+          "Mulailah dengan 5 menit, tingkatkan secara bertahap"
+        ]
+      },
+      {
+        "type": "image",
+        "src": "/placeholder.svg?height=400&width=800",
+        "alt": "Meditation posture",
+        "caption": "Posisi dasar untuk meditasi"
+      },
+      {
+        "type": "paragraph",
+        "text": "Jangan khawatir jika pikiran Anda terus menerus mengembara. Itu adalah hal yang normal. Kuncinya adalah menyadari hal itu dan dengan lembut mengembalikan fokus pada napas."
+      },
+      {
+        "type": "quote",
+        "text": "Meditasi bukan tentang mengosongkan pikiran, tapi tentang belajar mengamatinya tanpa terlibat.",
+        "author": "Yoga Instructor Budi Santoso"
+      },
+      {
+        "type": "paragraph",
+        "text": "Dengan konsisten berlatih 5-10 menit setiap hari, Anda akan mulai merasakan manfaatnya seperti pikiran yang lebih jernih dan emosi yang lebih stabil."
+      }
+    ],
+    "tags": ["Meditasi", "Relaksasi", "Mindfulness", "Stres"],
+    "likes": 178,
+    "comments": 29,
+    "shares": 22
+  },
+  {
+    "id": 4,
+    "title": "Dampak Media Sosial terhadap Kesehatan Mental Remaja",
+    "author": "Peneliti Dian Permata",
+    "date": "10 September 2023",
+    "readTime": "6 Min To Read",
+    "image": "/kesehatan-mental.jpg",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "Studi terbaru kami terhadap 1.200 remaja menunjukkan hubungan kompleks antara penggunaan media sosial dan kesehatan mental. Remaja yang menghabiskan lebih dari 3 jam sehari di media sosial menunjukkan gejala kecemasan 60% lebih tinggi."
+      },
+      {
+        "type": "heading",
+        "text": "Temuan Kunci Penelitian"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Perbandingan sosial yang tidak sehat",
+          "Gangguan pola tidur akibat blue light",
+          "Cyberbullying memicu depresi",
+          "Kecanduan likes dan validasi digital"
+        ]
+      },
+      {
+        "type": "image",
+        "src": "/placeholder.svg?height=400&width=800",
+        "alt": "Teenager using smartphone",
+        "caption": "Remaja modern menghadapi tantangan kesehatan mental unik"
+      },
+      {
+        "type": "heading",
+        "text": "Strategi Perlindungan"
+      },
+      {
+        "type": "paragraph",
+        "text": "Orang tua dapat membantu dengan: membatasi waktu screen time, mengajak diskusi kritis tentang konten media sosial, dan mendorong aktivitas offline. Sekolah juga berperan dengan program literasi digital."
+      },
+      {
+        "type": "quote",
+        "text": "Media sosial seperti pisau bermata dua - bisa menjadi alat koneksi yang kuat tapi juga sumber tekanan tak terlihat.",
+        "author": "Peneliti Dian Permata"
+      },
+      {
+        "type": "paragraph",
+        "text": "Yang penting adalah menciptakan kesadaran dan keterampilan mengelola penggunaan media sosial secara sehat, bukan melarangnya sepenuhnya."
+      }
+    ],
+    "tags": ["Remaja", "Media Sosial", "Parenting", "Literasi Digital"],
+    "likes": 298,
+    "comments": 63,
+    "shares": 45
+  },
+  {
+    "id": 5,
+    "title": "Work-Life Balance: Kunci Produktivitas dan Kesehatan Mental",
+    "author": "HR Consultant Rina Marlina",
+    "date": "05 Januari 2024",
+    "readTime": "4 Min To Read",
+    "image": "/kesehatan-mental.jpg",
+    "content": [
+      {
+        "type": "paragraph",
+        "text": "Dalam survei terhadap 500 profesional di Indonesia, 78% mengaku mengalami burnout akibat ketidakseimbangan kerja dan kehidupan pribadi. Padahal, keseimbangan ini justru meningkatkan produktivitas jangka panjang."
+      },
+      {
+        "type": "heading",
+        "text": "5 Langkah Praktis"
+      },
+      {
+        "type": "list",
+        "items": [
+          "Tetapkan batasan waktu kerja yang jelas",
+          "Belajar mengatakan 'tidak' pada tugas diluar kapasitas",
+          "Manfaatkan waktu cuti sepenuhnya",
+          "Ciptakan ritual setelah jam kerja",
+          "Komunikasikan kebutuhan Anda ke atasan"
+        ]
+      },
+      {
+        "type": "image",
+        "src": "/placeholder.svg?height=400&width=800",
+        "alt": "Work life balance illustration",
+        "caption": "Keseimbangan yang sehat meningkatkan kinerja"
+      },
+      {
+        "type": "heading",
+        "text": "Peran Perusahaan"
+      },
+      {
+        "type": "paragraph",
+        "text": "Perusahaan progresif kini menerapkan kebijakan seperti flexible hours, work from home options, dan mental health days. Investasi ini terbukti mengurangi turnover karyawan hingga 40%."
+      },
+      {
+        "type": "quote",
+        "text": "Produktivitas sejati bukan diukur dari jam kerja, tapi dari hasil dan kesejahteraan karyawan.",
+        "author": "HR Consultant Rina Marlina"
+      },
+      {
+        "type": "paragraph",
+        "text": "Mulailah dari perubahan kecil hari ini. Setiap langkah menuju keseimbangan yang lebih baik akan berdampak signifikan pada kesehatan mental dan kualitas hidup Anda."
+      }
+    ],
+    "tags": ["Produktivitas", "Burnout", "Kesehatan Kerja", "Manajemen Waktu"],
+    "likes": 321,
+    "comments": 52,
+    "shares": 68
+  }
+]

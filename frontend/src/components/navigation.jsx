@@ -31,11 +31,11 @@ export const Navigation = () => {
           <Link href="#features" className="text-sm font-medium">
             Features
           </Link>
-          <Link href="#testimonial" className="text-sm font-medium">
-            Testimonial
-          </Link>
           <Link href="#pricing" className="text-sm font-medium">
             Pricing
+          </Link>
+          <Link href="#testimonial" className="text-sm font-medium">
+            Testimonial
           </Link>
           <Link href="#" className="text-sm font-medium">
             About Us
