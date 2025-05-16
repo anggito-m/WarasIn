@@ -57,10 +57,21 @@ export default function AuthPage() {
 
   // Form validation (unchanged)
   const validateLoginForm = () => {
-    /* ... */
+    if (!loginForm.email) return "Email is required";
+    if (!loginForm.password) return "Password is required";
+    return null;
   };
   const validateSignupForm = () => {
-    /* ... */
+    if (!signupForm.name) return "Name is required";
+    if (!signupForm.email) return "Email is required";
+    if (!signupForm.password) return "Password is required";
+    if (signupForm.password.length < 8)
+      return "Password must be at least 8 characters";
+    if (signupForm.password !== signupForm.confirmPassword)
+      return "Passwords do not match";
+    if (!signupForm.agreeTerms)
+      return "You must agree to the terms and conditions";
+    return null;
   };
 
   // Handle login with bcrypt verification
