@@ -130,17 +130,15 @@ export function AppSidebar({ ...props }) {
       </SidebarContent>
       <div className="p-4 border-t border-blue-500">
         <SidebarFooter>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors"
-              >
-                <LogOut className="h-5 w-5" />
-                <span>Logout</span>
-              </button>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <SidebarMenuButton asChild>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 w-full px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+            >
+              <LogOut className="h-5 w-5" />
+              Logout
+            </button>
+          </SidebarMenuButton>
         </SidebarFooter>
       </div>
       <SidebarRail />
