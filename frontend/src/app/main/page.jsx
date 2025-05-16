@@ -23,7 +23,7 @@ export default function Home() {
                 <p className="text-xl">How Are You Today</p>
               </div>
               <div className="flex items-center gap-4">
-                <div className="flex gap-2">
+                {/* <div className="flex gap-2">
                   <Button className="bg-orange-500 hover:bg-orange-600">
                     Button
                   </Button>
@@ -33,7 +33,7 @@ export default function Home() {
                   <Button className="bg-orange-500 hover:bg-orange-600">
                     Button
                   </Button>
-                </div>
+                </div> */}
                 <Button
                   variant="outline"
                   className="rounded-full border-orange-200 px-4"
