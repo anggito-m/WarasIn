@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import bcrypt from "bcryptjs"; // or 'bcrypt' if using Node.js bcrypt
+// import bcrypt from "bcryptjs"; // or 'bcrypt' if using Node.js bcrypt
 import users from "@/data/user.json";
 
 export default function AuthPage() {
@@ -86,7 +86,8 @@ export default function AuthPage() {
       }
 
       // Verify password with bcrypt
-      const isMatch = await bcrypt.compare(loginForm.password, user.password);
+      // const isMatch = await bcrypt.compare(loginForm.password, user.password);
+      const isMatch = loginForm.password === user.password; // Simulated for demo purposes
 
       if (!isMatch) {
         throw new Error("Invalid credentials");
@@ -127,8 +128,8 @@ export default function AuthPage() {
 
       // Hash password with bcrypt
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(signupForm.password, salt);
-
+      // const hashedPassword = await bcrypt.hash(signupForm.password, salt);
+      const hashedPassword = signupForm.password; // Simulated for demo purposes
       console.log("New user would be created with:", {
         name: signupForm.name,
         email: signupForm.email,
