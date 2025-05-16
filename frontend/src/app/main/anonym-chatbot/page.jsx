@@ -20,26 +20,29 @@ export default function ChatbotPage() {
     {
       id: 1,
       sender: "bot",
-      text: "Hello, I'm FitBot! 👋 I'm your personal sport assistant. How can I help you?",
+      text: "Hi, I'm MindCareBot 🌿 Your mental health companion. How are you feeling today?",
       timestamp: new Date(),
       quickReplies: [
-        { id: 1, text: "Book me a visit in a gym" },
-        { id: 2, text: "Show me other sports facilities around" },
-        { id: 3, text: "Show me other options" },
+        { id: 1, text: "I'm feeling anxious" },
+        { id: 2, text: "I'm feeling down" },
+        { id: 3, text: "I just need someone to talk to" },
       ],
     },
     {
       id: 2,
       sender: "user",
-      text: "Ok, how about these?",
+      text: "I'm feeling anxious",
       timestamp: new Date(),
     },
     {
       id: 3,
       sender: "bot",
-      text: "BodyWorks on Nadwiślańska 12 street\n250 meters · 3D alone entrance all day",
+      text: "Thank you for sharing that with me. Anxiety can be really tough. Would you like a calming exercise or to talk about what's bothering you?",
       timestamp: new Date(),
-      facilities: ["gym", "spa", "pool"],
+      quickReplies: [
+        { id: 4, text: "Let's try a calming exercise" },
+        { id: 5, text: "I want to talk about it" },
+      ],
     },
   ]);
 
@@ -82,12 +85,12 @@ export default function ChatbotPage() {
       const botResponse = {
         id: messages.length + 2,
         sender: "bot",
-        text: "I'm searching for more options for you. Would you like me to filter by any specific amenities or location?",
+        text: "Thank you for sharing. Would you like to do a calming activity or talk about your feelings?",
         timestamp: new Date(),
         quickReplies: [
-          { id: 1, text: "Near me" },
-          { id: 2, text: "With pool" },
-          { id: 3, text: "Open 24/7" },
+          { id: 1, text: "Do a breathing exercise" },
+          { id: 2, text: "I want to talk" },
+          { id: 3, text: "Reflect with journaling" },
         ],
       };
       setMessages((prevMessages) => [...prevMessages, botResponse]);
@@ -108,36 +111,47 @@ export default function ChatbotPage() {
     setTimeout(() => {
       let botResponse;
 
-      if (replyText === "Book me a visit in a gym") {
+      if (replyText === "Do a breathing exercise") {
         botResponse = {
           id: messages.length + 2,
           sender: "bot",
-          text: "Great! I can help you book a gym visit. When would you like to go?",
+          text: "Let's take a moment to breathe. Inhale slowly for 4 seconds... Hold for 4... Exhale for 4... Repeat this 3 times. Feeling a bit better?",
           timestamp: new Date(),
           quickReplies: [
-            { id: 1, text: "Today" },
-            { id: 2, text: "Tomorrow" },
-            { id: 3, text: "This weekend" },
+            { id: 1, text: "Yes, a little better" },
+            { id: 2, text: "Still feel anxious" },
+            { id: 3, text: "Can we try something else?" },
           ],
         };
-      } else if (replyText === "Show me other sports facilities around") {
+      } else if (replyText === "I want to talk") {
         botResponse = {
           id: messages.length + 2,
           sender: "bot",
-          text: "Here are some sports facilities near you:",
+          text: "I'm here for you. Would you like to start by telling me how your day has been?",
           timestamp: new Date(),
-          facilities: ["gym", "spa", "pool", "tennis"],
+          quickReplies: [
+            { id: 1, text: "It's been a hard day" },
+            { id: 2, text: "Not sure how I feel" },
+            { id: 3, text: "I felt overwhelmed" },
+          ],
+        };
+      } else if (replyText === "Reflect with journaling") {
+        botResponse = {
+          id: messages.length + 2,
+          sender: "bot",
+          text: "That's a great step. Here's a prompt to start: *What is one thing you're grateful for today?* You can type your thoughts whenever you're ready.",
+          timestamp: new Date(),
         };
       } else {
         botResponse = {
           id: messages.length + 2,
           sender: "bot",
-          text: "I'm here to help! What would you like to know about?",
+          text: "I'm here to support you. Would you like help with any of the following?",
           timestamp: new Date(),
           quickReplies: [
-            { id: 1, text: "Fitness tips" },
-            { id: 2, text: "Nutrition advice" },
-            { id: 3, text: "Mental wellness" },
+            { id: 1, text: "Managing anxiety" },
+            { id: 2, text: "Lifting my mood" },
+            { id: 3, text: "Mindfulness tips" },
           ],
         };
       }
