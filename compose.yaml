@@ -1,0 +1,50 @@
+services:
+  goapp:
+    container_name: warasin-api
+    image: warasin-api:1.0.0
+    build:
+      context: ./backend
+      dockerfile: go.dockerfile
+    environment:
+      APP_NAME: WarasIn
+      ENVIRONMENT: development
+      PORT: 8080
+      DATABASE_URL:
+      JWT_SECRET:
+    ports:
+      - "8080:8080"
+    networks:
+      - warasin-network
+    restart: unless-stopped
+
+  # db: <--- INI SUDAH TIDAK PERLU
+  #   ...
+
+  migrate:
+    image: migrate/migrate
+    depends_on: []
+    volumes:
+      - ./backend/migrations:/migrations
+    command: ["-path", "/migrations", "-database", "up"]
+    networks:
+      - warasin-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: next.Dockerfile
+    container_name: warasin-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - goapp
+    restart: unless-stopped
+    networks:
+      - warasin-network
+
+volumes:
+  pgdata:
+
+networks:
+  warasin-network:
+    driver: bridge
