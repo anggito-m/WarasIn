@@ -9,7 +9,7 @@ services:
       APP_NAME: WarasIn
       ENVIRONMENT: development
       PORT: 8080
-      DATABASE_URL:
+      DATABASE_URL: "${DATABASE_URL}"
       JWT_SECRET:
     ports:
       - "8080:8080"
