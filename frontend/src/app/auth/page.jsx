@@ -30,15 +30,17 @@ import {
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 // import bcrypt from "bcryptjs"; // or 'bcrypt' if using Node.js bcrypt
-import users from "@/data/user.json";
+// import users from "@/data/user.json";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function AuthPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("login");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(null);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   // Form states
   const [loginForm, setLoginForm] = useState({
@@ -89,26 +91,38 @@ export default function AuthPage() {
     setIsLoading(true);
 
     try {
-      // Simulate API call - Find user in your JSON data
-      const user = users.find((u) => u.email === loginForm.email);
+      const response = await fetch(`${API_BASE_URL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: loginForm.email,
+          password: loginForm.password,
+        }),
+      });
 
-      if (!user) {
-        throw new Error("User not found");
+      const data = await response.json();
+
+      if (!response.ok) {
+        // Asumsikan backend mengirim error di data.message atau data.error
+        throw new Error(data.message || data.error || "Login failed");
       }
 
-      // Verify password with bcrypt
-      // const isMatch = await bcrypt.compare(loginForm.password, user.password);
-      const isMatch = loginForm.password === user.password; // Simulated for demo purposes
-
-      if (!isMatch) {
-        throw new Error("Invalid credentials");
+      // Asumsikan token ada di data.data.token atau data.token
+      const token = data.data?.token || data.token;
+      if (token) {
+        // Simpan token (contoh: localStorage)
+        // PERHATIAN: localStorage tidak ideal untuk token JWT sensitif karena rentan XSS.
+        // Pertimbangkan HttpOnly cookie yang di-set oleh backend atau solusi lebih aman.
+        localStorage.setItem("jwt_token", token);
+        setSuccess("Login successful! Redirecting...");
+        setTimeout(() => {
+          router.push("/main"); // Ganti dengan halaman tujuan setelah login
+        }, 1500);
+      } else {
+        throw new Error("Login successful, but no token received.");
       }
-
-      setSuccess("Login successful! Redirecting...");
-
-      setTimeout(() => {
-        router.push("/main");
-      }, 1500);
     } catch (err) {
       setError(err.message);
     } finally {
@@ -131,26 +145,27 @@ export default function AuthPage() {
     setIsLoading(true);
 
     try {
-      // Check if user already exists
-      const userExists = users.some((u) => u.email === signupForm.email);
-      if (userExists) {
-        throw new Error("Email already registered");
-      }
-
-      // Hash password with bcrypt
-      const salt = await bcrypt.genSalt(10);
-      // const hashedPassword = await bcrypt.hash(signupForm.password, salt);
-      const hashedPassword = signupForm.password; // Simulated for demo purposes
-      console.log("New user would be created with:", {
-        name: signupForm.name,
-        email: signupForm.email,
-        password: hashedPassword, // Never store plaintext!
-        createdAt: new Date().toISOString(),
+      const response = await fetch(`${API_BASE_URL}/users/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: signupForm.name,
+          email: signupForm.email,
+          password: signupForm.password, // Kirim password plain text, backend akan hash
+          user_type: "standard" // Bisa di-set di backend atau dikirim dari sini jika perlu
+        }),
       });
 
-      setSuccess("Account created successfully! You can now log in.");
+      const data = await response.json();
 
-      // Reset form and switch to login tab
+      if (!response.ok) {
+        throw new Error(data.message || data.error || "Signup failed");
+      }
+
+      // Signup berhasil
+      setSuccess("Account created successfully! You can now log in.");
       setSignupForm({
         name: "",
         email: "",
@@ -158,10 +173,9 @@ export default function AuthPage() {
         confirmPassword: "",
         agreeTerms: false,
       });
-
       setTimeout(() => {
         setActiveTab("login");
-        setSuccess(null);
+        setSuccess("");
       }, 2000);
     } catch (err) {
       setError(err.message);
