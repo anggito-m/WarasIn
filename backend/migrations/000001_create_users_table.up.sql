@@ -1,0 +1,11 @@
+CREATE TABLE
+    IF NOT EXISTS users (
+        user_id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        hash_password VARCHAR(255) NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        user_type VARCHAR(50) DEFAULT 'standard' NOT NULL
+    );
+
+CREATE INDEX IF NOT EXISTS idx_users_email ON users (email);

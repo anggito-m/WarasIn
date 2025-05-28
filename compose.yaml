@@ -22,10 +22,12 @@ services:
 
   migrate:
     image: migrate/migrate
+    environment:
+      DATABASE_URL: "${DATABASE_URL}"
     depends_on: []
     volumes:
       - ./backend/migrations:/migrations
-    command: ["-path", "/migrations", "-database", "up"]
+    command: ["-path", "/migrations", "-database", "${DATABASE_URL}", "up"]
     networks:
       - warasin-network
 
@@ -34,6 +36,8 @@ services:
       context: ./frontend
       dockerfile: next.Dockerfile
     container_name: warasin-frontend
+    environment:
+      - NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL}"
     ports:
       - "3000:3000"
     depends_on:
