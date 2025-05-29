@@ -67,7 +67,8 @@ func RegisterRoutes(
 	// Journal routes
 	journal := v1.Group("/journal").Use(authMiddleware)
 	{
-		journal.POST("", journalHandler.Create, logActivityMiddleware)
+		journal.POST("", journalHandler.Create, logActivityMiddleware)                          // For creating journal directly
+		journal.POST("/analyze-and-save", journalHandler.AnalyzeAndSave, logActivityMiddleware) // New route
 		journal.GET("", journalHandler.GetAll)
 		journal.GET("/:journal_id", journalHandler.GetByID)
 		journal.PATCH("/:journal_id", journalHandler.Update, logActivityMiddleware)

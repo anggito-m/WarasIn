@@ -78,8 +78,8 @@ func main() {
 
 	// Initialize use cases
 	userUsecase := usecase.NewUserUsecase(userRepo)
-	journalUsecase := usecase.NewJournalUsecase(journalRepo)
 	moodUsecase := usecase.NewMoodUsecase(moodRepo, journalRepo)
+	journalUsecase := usecase.NewJournalUsecase(journalRepo, moodUsecase, cfg)
 	chatUsecase := usecase.NewChatUsecase(chatRepo)
 	resourceUsecase := usecase.NewResourceUsecase(resourceRepo)
 	paymentUsecase := usecase.NewPaymentUsecase(paymentRepo, userRepo)

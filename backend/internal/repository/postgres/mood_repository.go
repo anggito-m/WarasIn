@@ -29,7 +29,7 @@ func NewMoodRepository(db *sql.DB) MoodRepository {
 func (r *moodRepository) Create(entry *domain.MoodEntry) (*domain.MoodEntry, error) {
 	now := time.Now()
 	query := `
-		INSERT INTO mood_entry (user_id, journal_id, entry_type, recorder_at, primary_emotion, intensity_level, trigger_factor, coping_strategy)
+		INSERT INTO mood_entries (user_id, journal_id, entry_type, recorded_at, primary_emotion, intensity_level, trigger_factor, coping_strategy)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		RETURNING entry_id
 	`
@@ -58,8 +58,8 @@ func (r *moodRepository) GetByID(id int, userID int) (*domain.MoodEntry, error) 
 	var entry domain.MoodEntry
 
 	query := `
-		SELECT entry_id, user_id, journal_id, entry_type, recorder_at, primary_emotion, intensity_level, trigger_factor, coping_strategy
-		FROM mood_entry
+		SELECT entry_id, user_id, journal_id, entry_type, recorded_at, primary_emotion, intensity_level, trigger_factor, coping_strategy
+		FROM mood_entries
 		WHERE entry_id = $1 AND user_id = $2
 	`
 
@@ -90,7 +90,7 @@ func (r *moodRepository) GetByUserID(userID int, limit, offset int, startDate, e
 	// Get total count
 	countQuery := `
 		SELECT COUNT(*)
-		FROM mood_entry
+		FROM mood_entries
 		WHERE user_id = $1
 	`
 
@@ -103,12 +103,12 @@ func (r *moodRepository) GetByUserID(userID int, limit, offset int, startDate, e
 	hasEntryType := entryType != ""
 
 	if hasStartDate {
-		countQuery += " AND recorder_at >= $" + strconv.Itoa(argIndex)
+		countQuery += " AND recorded_at >= $" + strconv.Itoa(argIndex)
 		args = append(args, startDate)
 		argIndex++
 	}
 	if hasEndDate {
-		countQuery += " AND recorder_at <= $" + strconv.Itoa(argIndex)
+		countQuery += " AND recorded_at <= $" + strconv.Itoa(argIndex)
 		args = append(args, endDate)
 		argIndex++
 	}
@@ -130,23 +130,23 @@ func (r *moodRepository) GetByUserID(userID int, limit, offset int, startDate, e
 	}
 
 	query := `
-		SELECT entry_id, user_id, journal_id, entry_type, recorder_at, primary_emotion, intensity_level, trigger_factor, coping_strategy
-		FROM mood_entry
+		SELECT entry_id, user_id, journal_id, entry_type, recorded_at, primary_emotion, intensity_level, trigger_factor, coping_strategy
+		FROM mood_entries
 		WHERE user_id = $1
 	`
 
 	// Add filters if provided
 	if hasStartDate {
-		query += " AND recorder_at >= $" + strconv.Itoa(argIndex-argIndex+2)
+		query += " AND recorded_at >= $" + strconv.Itoa(argIndex-argIndex+2)
 	}
 	if hasEndDate {
-		query += " AND recorder_at <= $" + strconv.Itoa(argIndex-argIndex+3)
+		query += " AND recorded_at <= $" + strconv.Itoa(argIndex-argIndex+3)
 	}
 	if hasEntryType {
 		query += " AND entry_type = $" + strconv.Itoa(argIndex-argIndex+4)
 	}
 
-	query += " ORDER BY recorder_at DESC LIMIT $" + strconv.Itoa(argIndex-argIndex+5) + " OFFSET $" + strconv.Itoa(argIndex-argIndex+6)
+	query += " ORDER BY recorded_at DESC LIMIT $" + strconv.Itoa(argIndex-argIndex+5) + " OFFSET $" + strconv.Itoa(argIndex-argIndex+6)
 	args = append(args, limit, offset)
 
 	rows, err := r.db.Query(query, args...)

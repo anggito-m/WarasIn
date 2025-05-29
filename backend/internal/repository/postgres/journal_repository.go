@@ -2,6 +2,10 @@ package postgres
 
 import (
 	"database/sql"
+	"fmt"
+	"log"
+	"strconv"
+	"strings"
 	"time"
 
 	"warasin/internal/domain"
@@ -27,10 +31,18 @@ func NewJournalRepository(db *sql.DB) JournalRepository {
 	}
 }
 
+func logArgsWithTypes(args []interface{}) string {
+	var loggedArgs []string
+	for i, arg := range args {
+		loggedArgs = append(loggedArgs, fmt.Sprintf("$%d: %v (%T)", i+1, arg, arg))
+	}
+	return strings.Join(loggedArgs, ", ")
+}
+
 func (r *journalRepository) Create(journal *domain.Journal) (*domain.Journal, error) {
 	now := time.Now()
 	query := `
-		INSERT INTO journal (user_id, content, created_at, updated_at)
+		INSERT INTO journals (user_id, content, created_at, updated_at)
 		VALUES ($1, $2, $3, $4)
 		RETURNING journal_id
 	`
@@ -55,14 +67,14 @@ func (r *journalRepository) Create(journal *domain.Journal) (*domain.Journal, er
 
 func (r *journalRepository) GetByID(id int, userID int) (*domain.Journal, error) {
 	var journal domain.Journal
-
 	query := `
 		SELECT journal_id, user_id, content, created_at, updated_at
-		FROM journal
+		FROM journals
 		WHERE journal_id = $1 AND user_id = $2
 	`
-
-	row := r.db.QueryRow(query, id, userID)
+	args := []interface{}{id, userID}
+	log.Printf("DEBUG: GetByID Query: %s, Args: [%s]", query, logArgsWithTypes(args))
+	row := r.db.QueryRow(query, args...)
 	err := row.Scan(
 		&journal.ID,
 		&journal.UserID,
@@ -75,91 +87,76 @@ func (r *journalRepository) GetByID(id int, userID int) (*domain.Journal, error)
 		if err == sql.ErrNoRows {
 			return nil, nil // Journal not found
 		}
-		return nil, err
+		return nil, fmt.Errorf("error getting journal by id (Query: %s, Args: %v): %w", query, args, err)
 	}
-
 	return &journal, nil
 }
 
 func (r *journalRepository) GetByUserID(userID int, limit, offset int, startDate, endDate time.Time) ([]*domain.Journal, int, error) {
-	// Get total count
 	var totalCount int
-	countQuery := `
-		SELECT COUNT(*)
-		FROM journal
-		WHERE user_id = $1
-	`
+	countQueryBase := "SELECT COUNT(*) FROM journals WHERE user_id = $1"
+	countArgs := []interface{}{userID}
+	countQueryConditions := ""
+	currentArgIdx := 2 // Start from $2 for conditional params
 
-	// Add date filters if provided
 	hasStartDate := !startDate.IsZero()
 	hasEndDate := !endDate.IsZero()
 
 	if hasStartDate {
-		countQuery += " AND created_at >= $2"
+		countQueryConditions += " AND created_at >= $" + strconv.Itoa(currentArgIdx)
+		countArgs = append(countArgs, startDate)
+		currentArgIdx++
 	}
 	if hasEndDate {
-		if hasStartDate {
-			countQuery += " AND created_at <= $3"
-		} else {
-			countQuery += " AND created_at <= $2"
-		}
+		countQueryConditions += " AND created_at <= $" + strconv.Itoa(currentArgIdx)
+		countArgs = append(countArgs, endDate)
+		currentArgIdx++
 	}
+	finalCountQuery := countQueryBase + countQueryConditions
 
-	var countErr error
-	if hasStartDate && hasEndDate {
-		countErr = r.db.QueryRow(countQuery, userID, startDate, endDate).Scan(&totalCount)
-	} else if hasStartDate {
-		countErr = r.db.QueryRow(countQuery, userID, startDate).Scan(&totalCount)
-	} else if hasEndDate {
-		countErr = r.db.QueryRow(countQuery, userID, endDate).Scan(&totalCount)
-	} else {
-		countErr = r.db.QueryRow(countQuery, userID).Scan(&totalCount)
-	}
-
-	if countErr != nil {
-		return nil, 0, countErr
-	}
-
-	// Get paginated results
-	if limit <= 0 {
-		limit = 10 // Default limit
-	}
-
-	query := `
-		SELECT journal_id, user_id, content, created_at, updated_at
-		FROM journal
-		WHERE user_id = $1
-	`
-
-	// Add date filters if provided
-	if hasStartDate {
-		query += " AND created_at >= $2"
-	}
-	if hasEndDate {
-		if hasStartDate {
-			query += " AND created_at <= $3"
-		} else {
-			query += " AND created_at <= $2"
-		}
-	}
-
-	query += " ORDER BY created_at DESC LIMIT $4 OFFSET $5"
-
-	var rows *sql.Rows
-	var err error
-
-	if hasStartDate && hasEndDate {
-		rows, err = r.db.Query(query, userID, startDate, endDate, limit, offset)
-	} else if hasStartDate {
-		rows, err = r.db.Query(query, userID, startDate, limit, offset)
-	} else if hasEndDate {
-		rows, err = r.db.Query(query, userID, endDate, limit, offset)
-	} else {
-		rows, err = r.db.Query(query, userID, limit, offset)
-	}
-
+	log.Printf("DEBUG: Count Query: %s, Args: [%s]", finalCountQuery, logArgsWithTypes(countArgs))
+	err := r.db.QueryRow(finalCountQuery, countArgs...).Scan(&totalCount)
 	if err != nil {
-		return nil, 0, err
+		// Tambahkan detail query dan args ke pesan error
+		return nil, 0, fmt.Errorf("error counting journals (Query: %s, Args: %v): %w", finalCountQuery, countArgs, err)
+	}
+
+	if limit <= 0 {
+		limit = 10
+	}
+	if offset < 0 {
+		offset = 0
+	}
+
+	mainQueryBase := "SELECT journal_id, user_id, content, created_at, updated_at FROM journals WHERE user_id = $1"
+	mainArgs := []interface{}{userID}
+	mainQueryConditions := ""
+	currentArgIdx = 2 // Reset for main query conditional params
+
+	if hasStartDate {
+		mainQueryConditions += " AND created_at >= $" + strconv.Itoa(currentArgIdx)
+		mainArgs = append(mainArgs, startDate)
+		currentArgIdx++
+	}
+	if hasEndDate {
+		mainQueryConditions += " AND created_at <= $" + strconv.Itoa(currentArgIdx)
+		mainArgs = append(mainArgs, endDate)
+		currentArgIdx++
+	}
+
+	orderByLimitOffset := " ORDER BY created_at DESC LIMIT $" + strconv.Itoa(currentArgIdx)
+	mainArgs = append(mainArgs, limit)
+	currentArgIdx++
+	orderByLimitOffset += " OFFSET $" + strconv.Itoa(currentArgIdx)
+	mainArgs = append(mainArgs, offset)
+
+	finalMainQuery := mainQueryBase + mainQueryConditions + orderByLimitOffset
+
+	log.Printf("DEBUG: Main Query: %s, Args: [%s]", finalMainQuery, logArgsWithTypes(mainArgs))
+	rows, err := r.db.Query(finalMainQuery, mainArgs...)
+	if err != nil {
+		// Tambahkan detail query dan args ke pesan error
+		return nil, 0, fmt.Errorf("error querying journals (Query: %s, Args: %v): %w", finalMainQuery, mainArgs, err)
 	}
 	defer rows.Close()
 
@@ -174,13 +171,13 @@ func (r *journalRepository) GetByUserID(userID int, limit, offset int, startDate
 			&journal.UpdatedAt,
 		)
 		if err != nil {
-			return nil, 0, err
+			return nil, 0, fmt.Errorf("error scanning journal row: %w", err)
 		}
 		journals = append(journals, &journal)
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, 0, err
+		return nil, 0, fmt.Errorf("error iterating journal rows: %w", err)
 	}
 
 	return journals, totalCount, nil
@@ -189,7 +186,7 @@ func (r *journalRepository) GetByUserID(userID int, limit, offset int, startDate
 func (r *journalRepository) Update(journal *domain.Journal) error {
 	now := time.Now()
 	query := `
-		UPDATE journal
+		UPDATE journals
 		SET content = $3, updated_at = $4
 		WHERE journal_id = $1 AND user_id = $2
 	`

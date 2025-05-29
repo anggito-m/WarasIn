@@ -9,7 +9,7 @@ type MoodEntry struct {
 	UserID         int       `json:"user_id"`
 	JournalID      int       `json:"journal_id"`
 	EntryType      string    `json:"entry_type"` // daily, event, reflection
-	RecordedAt     time.Time `json:"recorder_at"`
+	RecordedAt     time.Time `json:"recorded_at"`
 	PrimaryEmotion string    `json:"primary_emotion"`
 	IntensityLevel float64   `json:"intensity_level"`
 	TriggerFactor  string    `json:"trigger_factor"`

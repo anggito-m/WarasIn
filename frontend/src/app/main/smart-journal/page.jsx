@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "next/link"; // Jika Anda menggunakannya di Footer atau Navigation
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -10,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Search,
   Calendar,
@@ -25,9 +27,17 @@ import {
   Star,
   BookOpen,
   Filter,
+  Loader2,
+  AlertCircle,
+  CheckCircle2,
 } from "lucide-react";
+// import { Navigation } from "@/components/navigation"; // Uncomment jika ada
+// import { Footer } from "@/components/footer"; // Uncomment jika ada
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function SmartJournalPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedEntry, setSelectedEntry] = useState(null);
@@ -39,65 +49,92 @@ export default function SmartJournalPage() {
     tags: [],
   });
 
-  // Sample journal entries
-  const [journalEntries, setJournalEntries] = useState([
-    {
-      id: 1,
-      title: "Morning Reflection",
-      content:
-        "Today I woke up feeling refreshed after a good night's sleep. I had a nutritious breakfast and spent some time meditating before starting my day. I'm feeling optimistic about the challenges ahead.",
-      date: new Date(2023, 4, 15),
-      mood: "happy",
-      tags: ["morning", "meditation", "wellness"],
-      isFavorite: true,
-    },
-    {
-      id: 2,
-      title: "Work Stress",
-      content:
-        "The project deadline is approaching and I'm feeling overwhelmed with the amount of work left to do. I need to remember to take breaks and practice deep breathing when I feel anxious.",
-      date: new Date(2023, 4, 14),
-      mood: "stressed",
-      tags: ["work", "stress", "self-care"],
-      isFavorite: false,
-    },
-    {
-      id: 3,
-      title: "Evening Walk",
-      content:
-        "I took a long walk in the park this evening. The fresh air and natural surroundings helped clear my mind. I noticed the beautiful sunset and took a moment to appreciate the present.",
-      date: new Date(2023, 4, 13),
-      mood: "peaceful",
-      tags: ["nature", "mindfulness", "exercise"],
-      isFavorite: true,
-    },
-    {
-      id: 4,
-      title: "Friendship Reflection",
-      content:
-        "Had a deep conversation with an old friend today. It reminded me of the importance of maintaining meaningful connections. We shared our struggles and victories, and I felt understood.",
-      date: new Date(2023, 4, 12),
-      mood: "grateful",
-      tags: ["friendship", "connection", "gratitude"],
-      isFavorite: false,
-    },
-    {
-      id: 5,
-      title: "Feeling Down",
-      content:
-        "Today was difficult. I felt a persistent sadness that I couldn't shake off. I'm trying to remember that emotions are temporary and it's okay to have bad days. Tomorrow is a new opportunity.",
-      date: new Date(2023, 4, 11),
-      mood: "sad",
-      tags: ["emotions", "self-compassion", "healing"],
-      isFavorite: false,
-    },
-  ]);
+  const [journalEntries, setJournalEntries] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [pageError, setPageError] = useState(null);
+  const [pageSuccess, setPageSuccess] = useState(null);
+
+  const messagesEndRef = useRef(null); // Tidak terpakai di kode ini, bisa dihapus jika tidak ada scroll logic lain
+
+  const getAuthToken = () => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("jwt_token");
+    }
+    return null;
+  };
+
+  const fetchJournalEntries = async () => {
+    setIsLoading(true);
+    setPageError(null);
+    const token = getAuthToken();
+    if (!token) {
+      router.push("/auth"); // Redirect jika tidak ada token
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/journal?limit=100&offset=0`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.status === 401) {
+        localStorage.removeItem("jwt_token");
+        router.push("/auth");
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to fetch journal entries");
+      }
+
+      const data = await response.json();
+      const fetchedEntries = (data.entries || []).map((entry) => {
+        const contentParts = entry.content.split("\n\n");
+        let title = `Entry ${entry.journal_id}`;
+        let mainContent = entry.content;
+        if (contentParts.length > 1 && contentParts[0].length < 100) {
+          title = contentParts[0];
+          mainContent = contentParts.slice(1).join("\n\n");
+        }
+        return {
+          id: entry.journal_id,
+          title: title,
+          content: mainContent,
+          date: new Date(entry.created_at),
+          mood: "neutral", // Default, karena tidak ada di data journal backend
+          tags: [], // Default, karena tidak ada di data journal backend
+          isFavorite: false, // Default, karena tidak ada di data journal backend
+          user_id: entry.user_id,
+          created_at: entry.created_at,
+          updated_at: entry.updated_at,
+        };
+      });
+      setJournalEntries(
+        fetchedEntries.sort((a, b) => new Date(b.date) - new Date(a.date))
+      );
+    } catch (err) {
+      setPageError(err.message || "Could not load journals.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJournalEntries();
+  }, []); // Hanya dijalankan sekali saat komponen mount
 
   const moodIcons = {
     happy: <Smile className="h-5 w-5 text-green-500" />,
     sad: <Frown className="h-5 w-5 text-blue-500" />,
     stressed: <Frown className="h-5 w-5 text-red-500" />,
-    peaceful: <Smile className="h-5 w-5 text-blue-300" />,
+    peaceful: <Smile className="h-5 w-5 text-teal-500" />,
     grateful: <Heart className="h-5 w-5 text-pink-500" />,
     neutral: <Meh className="h-5 w-5 text-gray-500" />,
   };
@@ -131,25 +168,22 @@ export default function SmartJournalPage() {
     })
     .filter((entry) => {
       if (!searchQuery) return true;
+      const SQuery = searchQuery.toLowerCase();
       return (
-        entry.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        entry.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        entry.tags.some((tag) =>
-          tag.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        (entry.title && entry.title.toLowerCase().includes(SQuery)) ||
+        (entry.content && entry.content.toLowerCase().includes(SQuery)) ||
+        (entry.tags &&
+          entry.tags.some((tag) => tag.toLowerCase().includes(SQuery)))
       );
     })
-    .sort((a, b) => b.date - a.date);
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const handleCreateNewEntry = () => {
     setSelectedEntry(null);
     setIsEditing(true);
-    setNewEntry({
-      title: "",
-      content: "",
-      mood: "neutral",
-      tags: [],
-    });
+    setNewEntry({ title: "", content: "", mood: "neutral", tags: [] });
+    setPageError(null);
+    setPageSuccess(null);
   };
 
   const handleEditEntry = (entry) => {
@@ -161,48 +195,152 @@ export default function SmartJournalPage() {
       mood: entry.mood,
       tags: [...entry.tags],
     });
+    setPageError(null);
+    setPageSuccess(null);
   };
 
-  const handleSaveEntry = () => {
-    if (selectedEntry) {
-      // Edit existing entry
-      setJournalEntries(
-        journalEntries.map((entry) =>
-          entry.id === selectedEntry.id
-            ? {
-                ...entry,
-                title: newEntry.title,
-                content: newEntry.content,
-                mood: newEntry.mood,
-                tags: newEntry.tags,
-              }
-            : entry
-        )
-      );
-    } else {
-      // Create new entry
-      const newId = Math.max(0, ...journalEntries.map((entry) => entry.id)) + 1;
-      setJournalEntries([
-        {
-          id: newId,
-          title: newEntry.title,
-          content: newEntry.content,
-          date: new Date(),
-          mood: newEntry.mood,
-          tags: newEntry.tags,
-          isFavorite: false,
-        },
-        ...journalEntries,
-      ]);
+  const handleSaveEntry = async () => {
+    setPageError(null);
+    setPageSuccess(null);
+    if (!newEntry.title.trim() && !newEntry.content.trim()) {
+      setPageError("Title or content cannot be empty.");
+      return;
     }
-    setIsEditing(false);
+    setIsLoading(true);
+
+    const token = getAuthToken();
+    if (!token) {
+      setPageError("Authentication required.");
+      setIsLoading(false);
+      router.push("/auth");
+      return;
+    }
+
+    const combinedContent = `${newEntry.title}\n\n${newEntry.content}`;
+    const apiPayload = { content: combinedContent };
+
+    const method = selectedEntry ? "PATCH" : "POST";
+    const endpoint = selectedEntry
+      ? `${API_BASE_URL}/journal/${selectedEntry.id}`
+      : `${API_BASE_URL}/journal`;
+
+    try {
+      const response = await fetch(endpoint, {
+        method: method,
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(apiPayload),
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem("jwt_token");
+        router.push("/auth");
+        return;
+      }
+
+      const responseData = await response.json();
+      if (!response.ok) {
+        throw new Error(
+          responseData.message ||
+            `Failed to ${selectedEntry ? "update" : "create"} journal`
+        );
+      }
+
+      setPageSuccess(
+        `Journal entry ${selectedEntry ? "updated" : "created"} successfully!`
+      );
+      setIsEditing(false);
+      await fetchJournalEntries(); // Re-fetch untuk data terbaru
+
+      // Update selectedEntry dengan data dari backend jika berhasil
+      if (method === "POST" && responseData.journal_id) {
+        const newlyCreatedEntry =
+          (await fetchJournalEntries(),
+          journalEntries.find((je) => je.id === responseData.journal_id) || {
+            id: responseData.journal_id,
+            title: newEntry.title,
+            content: newEntry.content,
+            date: new Date(responseData.created_at || Date.now()),
+            mood: newEntry.mood,
+            tags: newEntry.tags,
+            isFavorite: false,
+            user_id: responseData.user_id,
+            created_at: responseData.created_at,
+            updated_at: responseData.updated_at,
+          });
+        setSelectedEntry(newlyCreatedEntry);
+      } else if (
+        method === "PATCH" &&
+        selectedEntry &&
+        responseData.journal_id
+      ) {
+        const updatedEntryData =
+          (await fetchJournalEntries(),
+          journalEntries.find((je) => je.id === responseData.journal_id) || {
+            ...selectedEntry,
+            title: newEntry.title,
+            content: newEntry.content,
+            mood: newEntry.mood,
+            tags: newEntry.tags,
+            date: new Date(responseData.updated_at || selectedEntry.date),
+            updated_at: responseData.updated_at,
+          });
+        setSelectedEntry(updatedEntryData);
+      }
+    } catch (err) {
+      setPageError(err.message || "An error occurred while saving.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDeleteEntry = (id) => {
-    setJournalEntries(journalEntries.filter((entry) => entry.id !== id));
-    if (selectedEntry && selectedEntry.id === id) {
-      setSelectedEntry(null);
-      setIsEditing(false);
+  const handleDeleteEntry = async (id) => {
+    if (!confirm("Are you sure you want to delete this journal entry?")) return;
+    setPageError(null);
+    setPageSuccess(null);
+    setIsLoading(true);
+
+    const token = getAuthToken();
+    if (!token) {
+      setPageError("Authentication required.");
+      setIsLoading(false);
+      router.push("/auth");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/journal/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 401) {
+        localStorage.removeItem("jwt_token");
+        router.push("/auth");
+        return;
+      }
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to delete journal entry");
+      }
+
+      setPageSuccess("Journal entry deleted successfully.");
+      setJournalEntries((prevEntries) =>
+        prevEntries.filter((entry) => entry.id !== id)
+      );
+      if (selectedEntry && selectedEntry.id === id) {
+        setSelectedEntry(null);
+        setIsEditing(false);
+      }
+    } catch (err) {
+      setPageError(err.message || "Could not delete entry.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -218,15 +356,18 @@ export default function SmartJournalPage() {
         isFavorite: !selectedEntry.isFavorite,
       });
     }
+    setPageSuccess(`Favorite status updated for entry ${id}. (Frontend only)`);
   };
 
   const handleAddTag = (e) => {
-    if (e.key === "Enter" && e.target.value.trim()) {
-      const newTag = e.target.value.trim().toLowerCase();
+    const inputElement = e.target;
+    if (e.key === "Enter" && inputElement.value.trim()) {
+      const newTag = inputElement.value.trim().toLowerCase();
       if (!newEntry.tags.includes(newTag)) {
         setNewEntry({ ...newEntry, tags: [...newEntry.tags, newTag] });
       }
-      e.target.value = "";
+      inputElement.value = "";
+      e.preventDefault();
     }
   };
 
@@ -238,10 +379,15 @@ export default function SmartJournalPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-gray-50">
+      {" "}
+      {/* Added bg-gray-50 */}
+      {/* <Navigation /> */}
       <div className="flex flex-1">
         <main className="flex-1 flex flex-col">
-          <div className="border-b">
+          <div className="border-b bg-white">
+            {" "}
+            {/* Added bg-white */}
             <div className="container mx-auto px-6 py-4 flex items-center justify-between">
               <h1 className="text-2xl font-bold">Smart Journal</h1>
               <Button
@@ -250,7 +396,8 @@ export default function SmartJournalPage() {
               >
                 <span className="mr-2 text-orange-500">User</span>
                 <Avatar className="h-6 w-6 border border-orange-200">
-                  <AvatarImage src="/placeholder.svg" />
+                  <AvatarImage src="/placeholder.svg" />{" "}
+                  {/* Ganti dengan gambar user jika ada */}
                   <AvatarFallback className="bg-orange-100 text-orange-500">
                     U
                   </AvatarFallback>
@@ -259,10 +406,31 @@ export default function SmartJournalPage() {
             </div>
           </div>
 
-          <div className="flex-1 flex overflow-hidden">
-            {/* Journal entries list */}
-            <div className="w-80 border-r flex flex-col">
-              <div className="p-4 border-b">
+          <div className="container mx-auto px-6 pt-4">
+            {pageError && (
+              <Alert
+                variant="destructive"
+                className="bg-red-50 text-red-700 border-red-200 mb-4"
+              >
+                <AlertCircle className="h-4 w-4 mr-2" />
+                <AlertDescription>{pageError}</AlertDescription>
+              </Alert>
+            )}
+            {pageSuccess && (
+              <Alert className="bg-green-50 text-green-700 border-green-200 mb-4">
+                <CheckCircle2 className="h-4 w-4 mr-2" />
+                <AlertDescription>{pageSuccess}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+
+          <div className="flex-1 flex overflow-hidden container mx-auto px-6 py-8 gap-6">
+            {" "}
+            {/* Added gap-6 */}
+            <div className="w-80 border-r flex flex-col bg-white p-4 rounded-lg shadow-sm">
+              {" "}
+              {/* Added bg, p, rounded, shadow */}
+              <div className="pb-4 border-b">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <Input
@@ -273,37 +441,35 @@ export default function SmartJournalPage() {
                   />
                 </div>
               </div>
-
-              <div className="p-4 border-b">
-                <Tabs
-                  defaultValue="all"
-                  value={activeTab}
-                  onValueChange={setActiveTab}
-                >
+              <div className="py-4 border-b">
+                <Tabs value={activeTab} onValueChange={setActiveTab}>
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="font-medium">Filter by</h2>
-                    <Button variant="ghost" size="sm" className="h-8 px-2">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 px-2 text-gray-600 hover:bg-gray-100"
+                    >
                       <Filter className="h-4 w-4 mr-1" />
-                      <span className="text-xs">More filters</span>
+                      <span className="text-xs">More</span>
                     </Button>
                   </div>
-                  <TabsList className="grid grid-cols-3 mb-2">
+                  <TabsList className="grid grid-cols-3 mb-2 w-full">
                     <TabsTrigger value="all">All</TabsTrigger>
                     <TabsTrigger value="favorites">Favorites</TabsTrigger>
                     <TabsTrigger value="happy">Happy</TabsTrigger>
                   </TabsList>
-                  <TabsList className="grid grid-cols-3">
+                  <TabsList className="grid grid-cols-3 w-full">
                     <TabsTrigger value="sad">Sad</TabsTrigger>
                     <TabsTrigger value="stressed">Stressed</TabsTrigger>
                     <TabsTrigger value="peaceful">Peaceful</TabsTrigger>
                   </TabsList>
                 </Tabs>
               </div>
-
-              <div className="flex-1 overflow-y-auto">
-                <div className="p-4">
+              <div className="flex-1 overflow-y-auto pt-4">
+                <div className="pb-4">
                   <Button
-                    className="w-full bg-blue-500 hover:bg-blue-600"
+                    className="w-full bg-blue-500 hover:bg-blue-600 text-white"
                     onClick={handleCreateNewEntry}
                   >
                     <Plus className="h-4 w-4 mr-2" />
@@ -311,103 +477,125 @@ export default function SmartJournalPage() {
                   </Button>
                 </div>
 
-                <div className="space-y-2 p-4">
+                {isLoading && journalEntries.length === 0 && (
+                  <div className="p-4 text-center text-gray-500">
+                    <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
+                    Loading entries...
+                  </div>
+                )}
+
+                <div className="space-y-2">
                   {filteredEntries.map((entry) => (
                     <div
                       key={entry.id}
                       className={`rounded-lg border p-3 cursor-pointer transition-colors ${
                         selectedEntry && selectedEntry.id === entry.id
                           ? "border-blue-500 bg-blue-50"
-                          : "hover:bg-gray-50"
+                          : "hover:bg-gray-100 border-gray-200" // Slightly improved hover
                       }`}
                       onClick={() => {
                         setSelectedEntry(entry);
                         setIsEditing(false);
+                        setPageError(null);
+                        setPageSuccess(null);
                       }}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center">
-                          {moodIcons[entry.mood]}
-                          <h3 className="font-medium ml-2 truncate">
+                        <div className="flex items-center min-w-0">
+                          {moodIcons[entry.mood] || moodIcons["neutral"]}
+                          <h3 className="font-medium ml-2 truncate text-gray-800">
                             {entry.title}
                           </h3>
                         </div>
                         {entry.isFavorite && (
-                          <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                          <Star className="h-4 w-4 text-yellow-400 fill-yellow-400 flex-shrink-0" />
                         )}
                       </div>
-                      <p className="text-sm text-gray-500 line-clamp-2 mb-2">
+                      <p className="text-sm text-gray-600 line-clamp-2 mb-2">
                         {entry.content}
                       </p>
-                      <div className="flex items-center text-xs text-gray-400">
+                      <div className="flex items-center text-xs text-gray-500">
                         <Calendar className="h-3 w-3 mr-1" />
-                        <span>{format(entry.date, "MMM d, yyyy")}</span>
+                        <span>{format(new Date(entry.date), "MMM d, yy")}</span>
                         <Clock className="h-3 w-3 ml-2 mr-1" />
-                        <span>{format(entry.date, "h:mm a")}</span>
+                        <span>{format(new Date(entry.date), "h:mm a")}</span>
                       </div>
                     </div>
                   ))}
+                  {filteredEntries.length === 0 && !isLoading && (
+                    <p className="text-center text-gray-500 py-4">
+                      No journal entries found.
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
-
-            {/* Journal entry detail/editor */}
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="flex-1 flex flex-col overflow-hidden bg-white p-1 rounded-lg shadow-sm">
               {selectedEntry && !isEditing ? (
                 <div className="flex-1 overflow-y-auto p-6">
                   <div className="max-w-3xl mx-auto">
                     <div className="flex items-center justify-between mb-6">
-                      <div className="flex items-center">
-                        {moodIcons[selectedEntry.mood]}
-                        <h2 className="text-2xl font-bold ml-2">
+                      <div className="flex items-center min-w-0">
+                        {moodIcons[selectedEntry.mood] || moodIcons["neutral"]}
+                        <h2 className="text-2xl font-bold ml-2 truncate text-gray-800">
                           {selectedEntry.title}
                         </h2>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-shrink-0">
                         <Button
                           variant="outline"
                           size="icon"
                           onClick={() => handleToggleFavorite(selectedEntry.id)}
+                          title={
+                            selectedEntry.isFavorite
+                              ? "Remove from favorites"
+                              : "Add to favorites"
+                          }
                           className={
                             selectedEntry.isFavorite
-                              ? "text-yellow-400"
-                              : "text-gray-400"
+                              ? "text-yellow-500 border-yellow-400 hover:bg-yellow-50"
+                              : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
                           }
                         >
                           <Star
                             className={`h-4 w-4 ${
-                              selectedEntry.isFavorite
-                                ? "fill-yellow-400"
-                                : "fill-none"
+                              selectedEntry.isFavorite ? "fill-yellow-400" : "" // No fill for non-favorite
                             }`}
                           />
                         </Button>
                         <Button
                           variant="outline"
                           size="icon"
+                          title="Edit entry"
                           onClick={() => handleEditEntry(selectedEntry)}
+                          className="text-gray-500 hover:text-gray-700 hover:bg-gray-100"
                         >
                           <Edit3 className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="outline"
                           size="icon"
-                          className="text-red-500"
+                          title="Delete entry"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50 border-red-300 hover:border-red-400"
                           onClick={() => handleDeleteEntry(selectedEntry.id)}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
                     </div>
-
                     <div className="flex items-center text-sm text-gray-500 mb-4">
                       <Calendar className="h-4 w-4 mr-1" />
-                      <span>{format(selectedEntry.date, "MMMM d, yyyy")}</span>
+                      <span>
+                        {format(new Date(selectedEntry.date), "MMMM d, yyyy")}
+                      </span>{" "}
+                      {/* Completed here */}
                       <Clock className="h-4 w-4 ml-4 mr-1" />
-                      <span>{format(selectedEntry.date, "h:mm a")}</span>
+                      <span>
+                        {format(new Date(selectedEntry.date), "h:mm a")}
+                      </span>
                     </div>
 
-                    <div className="prose max-w-none mb-6">
+                    <div className="prose max-w-none mb-6 text-gray-700">
                       <p className="whitespace-pre-line">
                         {selectedEntry.content}
                       </p>
@@ -433,7 +621,7 @@ export default function SmartJournalPage() {
                 <div className="flex-1 overflow-y-auto p-6">
                   <div className="max-w-3xl mx-auto">
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-2xl font-bold">
+                      <h2 className="text-2xl font-bold text-gray-800">
                         {selectedEntry
                           ? "Edit Journal Entry"
                           : "New Journal Entry"}
@@ -441,15 +629,26 @@ export default function SmartJournalPage() {
                       <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
-                          onClick={() => setIsEditing(false)}
+                          onClick={() => {
+                            setIsEditing(false);
+                            if (!selectedEntry && journalEntries.length > 0) {
+                              // setSelectedEntry(journalEntries[0]); // Optionally select first entry or clear
+                            }
+                          }}
+                          disabled={isLoading}
                         >
                           Cancel
                         </Button>
                         <Button
-                          className="bg-blue-500 hover:bg-blue-600"
+                          className="bg-blue-500 hover:bg-blue-600 text-white"
                           onClick={handleSaveEntry}
+                          disabled={isLoading}
                         >
-                          Save
+                          {isLoading ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            "Save"
+                          )}
                         </Button>
                       </div>
                     </div>
@@ -469,9 +668,10 @@ export default function SmartJournalPage() {
                             setNewEntry({ ...newEntry, title: e.target.value })
                           }
                           placeholder="Enter a title for your journal entry"
+                          disabled={isLoading}
+                          className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                         />
                       </div>
-
                       <div>
                         <label
                           htmlFor="content"
@@ -489,59 +689,63 @@ export default function SmartJournalPage() {
                             })
                           }
                           placeholder="Write your thoughts here..."
-                          className="min-h-[300px]"
+                          className="min-h-[300px] border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                          disabled={isLoading}
                         />
                       </div>
-
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Mood
+                          Mood (Optional)
                         </label>
                         <div className="flex flex-wrap gap-2">
-                          {moodOptions.map((mood) => (
+                          {moodOptions.map((moodOpt) => (
                             <Button
-                              key={mood.value}
+                              key={moodOpt.value}
                               type="button"
                               variant={
-                                newEntry.mood === mood.value
+                                newEntry.mood === moodOpt.value
                                   ? "default"
                                   : "outline"
                               }
                               className={`flex items-center gap-1 ${
-                                newEntry.mood === mood.value
-                                  ? "bg-blue-500 hover:bg-blue-600"
-                                  : ""
+                                newEntry.mood === moodOpt.value
+                                  ? "bg-blue-500 hover:bg-blue-600 text-white"
+                                  : "text-gray-700 border-gray-300 hover:bg-gray-50"
                               }`}
                               onClick={() =>
-                                setNewEntry({ ...newEntry, mood: mood.value })
+                                setNewEntry({
+                                  ...newEntry,
+                                  mood: moodOpt.value,
+                                })
                               }
+                              disabled={isLoading}
                             >
-                              {mood.icon}
-                              <span>{mood.label}</span>
+                              {moodOpt.icon}
+                              <span>{moodOpt.label}</span>
                             </Button>
                           ))}
                         </div>
                       </div>
-
                       <div>
                         <label
                           htmlFor="tags"
                           className="block text-sm font-medium text-gray-700 mb-1"
                         >
-                          Tags
+                          Tags (Optional, press Enter to add)
                         </label>
                         <div className="flex flex-wrap items-center gap-2 mb-2">
                           {newEntry.tags.map((tag) => (
                             <Badge
                               key={tag}
                               variant="secondary"
-                              className="flex items-center gap-1"
+                              className="flex items-center gap-1 bg-gray-200 text-gray-700"
                             >
                               #{tag}
                               <button
                                 type="button"
-                                className="ml-1 text-gray-400 hover:text-gray-600"
+                                className="ml-1 text-gray-500 hover:text-gray-700"
                                 onClick={() => handleRemoveTag(tag)}
+                                disabled={isLoading}
                               >
                                 &times;
                               </button>
@@ -550,28 +754,32 @@ export default function SmartJournalPage() {
                         </div>
                         <Input
                           id="tags"
-                          placeholder="Add tags (press Enter after each tag)"
+                          placeholder="Add tags..."
                           onKeyDown={handleAddTag}
+                          disabled={isLoading}
+                          className="border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
               ) : (
-                <div className="flex-1 flex items-center justify-center p-6 bg-gray-50">
+                <div className="flex-1 flex items-center justify-center p-6 bg-gray-100 rounded-md">
+                  {" "}
+                  {/* Slightly different bg */}
                   <div className="text-center">
                     <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 mb-4">
                       <BookOpen className="h-8 w-8 text-blue-500" />
                     </div>
-                    <h3 className="text-lg font-medium mb-2">
+                    <h3 className="text-lg font-medium mb-2 text-gray-700">
                       Select or Create a Journal Entry
                     </h3>
                     <p className="text-gray-500 mb-4 max-w-md">
-                      Select an existing entry from the list or create a new one
-                      to start journaling your thoughts and feelings.
+                      Select an existing entry from the list on the left, or
+                      create a new one to get started.
                     </p>
                     <Button
-                      className="bg-blue-500 hover:bg-blue-600"
+                      className="bg-blue-500 hover:bg-blue-600 text-white"
                       onClick={handleCreateNewEntry}
                     >
                       <Plus className="h-4 w-4 mr-2" />
@@ -584,7 +792,6 @@ export default function SmartJournalPage() {
           </div>
         </main>
       </div>
-
       {/* Footer */}
       <footer className="border-t py-12">
         <div className="container mx-auto px-6">
