@@ -211,7 +211,7 @@ func (r *journalRepository) Update(journal *domain.Journal) error {
 
 func (r *journalRepository) Delete(id int, userID int) error {
 	query := `
-		DELETE FROM journal
+		DELETE FROM journals
 		WHERE journal_id = $1 AND user_id = $2
 	`
 
