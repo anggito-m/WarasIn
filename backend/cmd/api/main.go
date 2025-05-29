@@ -21,7 +21,8 @@ import (
 	"warasin/pkg/database"
 
 	"github.com/golang-migrate/migrate/v4"
-	// "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 func runMigrations(databaseURL string) {
@@ -41,20 +42,30 @@ func runMigrations(databaseURL string) {
 }
 
 func main() {
+	log.Println("Starting WarasIn API...")
+
 	// Load environment variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, using environment variables")
 	}
 
 	// Initialize configuration
+	log.Println("Initializing configuration...")
 	cfg := config.New()
+	log.Printf("Port: %s", cfg.Port)
+
+	// Run migrations
+	log.Println("Running migrations...")
+	runMigrations(cfg.DatabaseURL)
 
 	// Set up database connection
+	log.Println("Connecting to database...")
 	db, err := database.NewPostgresConnection(cfg.DatabaseURL)
 	if err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	defer db.Close()
+	log.Println("Database connected successfully!")
 
 	// Initialize repositories
 	userRepo := postgres.NewUserRepository(db)
@@ -90,7 +101,7 @@ func main() {
 	if gin.Mode() == gin.ReleaseMode {
 		// Production - specify your Vercel domain
 		corsConfig.AllowOrigins = []string{
-			"https://waras-in.vercel.app/", // Replace with your actual Vercel domain
+			"https://waras-in.vercel.app", // Removed trailing slash
 			// Add any other production domains here
 		}
 	} else {
@@ -104,11 +115,45 @@ func main() {
 
 	router.Use(cors.New(corsConfig))
 
+	// Add root route
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message":     "Welcome to WarasIn API",
+			"status":      "running",
+			"version":     "1.0.0",
+			"description": "Mental Health & Wellness API",
+			"endpoints": gin.H{
+				"health":     "/health",
+				"api_docs":   "/api/v1",
+				"users":      "/api/v1/users",
+				"journals":   "/api/v1/journals",
+				"moods":      "/api/v1/moods",
+				"chats":      "/api/v1/chats",
+				"resources":  "/api/v1/resources",
+				"payments":   "/api/v1/payments",
+				"activities": "/api/v1/activities",
+			},
+			"timestamp": time.Now().UTC(),
+		})
+	})
+
 	// Add a health check endpoint for Render
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"status": "ok",
-			"time":   time.Now().UTC(),
+			"status":    "ok",
+			"message":   "WarasIn API is healthy",
+			"database":  "connected",
+			"timestamp": time.Now().UTC(),
+		})
+	})
+
+	// Add API info endpoint
+	router.GET("/api", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"api_name":    "WarasIn API",
+			"version":     "1.0.0",
+			"description": "Mental Health & Wellness Platform API",
+			"author":      "WarasIn Team",
 		})
 	})
 
@@ -132,11 +177,13 @@ func main() {
 
 	// Start server in a goroutine
 	go func() {
-		log.Printf("Server running on port %s", cfg.Port)
+		log.Printf("Server starting on port %s", cfg.Port)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)
 		}
 	}()
+
+	log.Println("Server started successfully! 🚀")
 
 	// Wait for interrupt signal to gracefully shut down the server
 	quit := make(chan os.Signal, 1)
