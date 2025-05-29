@@ -154,7 +154,7 @@ export default function AuthPage() {
           name: signupForm.name,
           email: signupForm.email,
           password: signupForm.password, // Kirim password plain text, backend akan hash
-          user_type: "standard" // Bisa di-set di backend atau dikirim dari sini jika perlu
+          user_type: "standard", // Bisa di-set di backend atau dikirim dari sini jika perlu
         }),
       });
 
@@ -184,22 +184,156 @@ export default function AuthPage() {
     }
   };
 
-  // Handle Google login
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setError(null);
     setSuccess(null);
     setIsLoading(true);
 
-    // Simulate Google OAuth
-    setTimeout(() => {
-      setIsLoading(false);
-      setSuccess("Google login successful! Redirecting...");
+    try {
+      // Load Google API script if not already loaded
+      if (!window.google) {
+        await loadGoogleScript();
+      }
 
-      // Simulate redirect after successful login
-      setTimeout(() => {
-        router.push("/main");
-      }, 1500);
-    }, 2000);
+      // Use renderButton method instead of prompt
+      const buttonContainer = document.createElement("div");
+      buttonContainer.style.display = "none";
+      document.body.appendChild(buttonContainer);
+
+      window.google.accounts.id.initialize({
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+        callback: handleGoogleCallback,
+        auto_select: false,
+        cancel_on_tap_outside: false,
+      });
+
+      // Render hidden button and trigger click
+      window.google.accounts.id.renderButton(buttonContainer, {
+        theme: "outline",
+        size: "large",
+      });
+
+      // Alternative: Use OAuth2 popup method
+      window.google.accounts.oauth2
+        .initTokenClient({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+          scope: "openid email profile",
+          callback: (response) => {
+            if (response.access_token) {
+              handleGoogleTokenCallback(response.access_token);
+            }
+          },
+        })
+        .requestAccessToken();
+    } catch (err) {
+      setError("Failed to initialize Google login: " + err.message);
+      setIsLoading(false);
+    }
+  };
+
+  // Alternative callback for access token
+  const handleGoogleTokenCallback = async (accessToken) => {
+    try {
+      // Get user info using access token
+      const userInfoResponse = await fetch(
+        `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken}`
+      );
+      const userInfo = await userInfoResponse.json();
+
+      // Send to your backend
+      const backendResponse = await fetch(
+        `${API_BASE_URL}/users/google-login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: accessToken, // Send access token instead of ID token
+            user_info: userInfo, // Send user info directly
+          }),
+        }
+      );
+
+      const data = await backendResponse.json();
+
+      if (!backendResponse.ok) {
+        throw new Error(data.message || "Google login failed");
+      }
+
+      const token = data.data?.token;
+      if (token) {
+        localStorage.setItem("jwt_token", token);
+        setSuccess("Google login successful! Redirecting...");
+        setTimeout(() => {
+          router.push("/main");
+        }, 1500);
+      } else {
+        throw new Error("Login successful, but no token received.");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Handle Google OAuth callback
+  const handleGoogleCallback = async (response) => {
+    try {
+      // Send ID token to your backend
+      const backendResponse = await fetch(
+        `${API_BASE_URL}/v1/users/google-login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            token: response.credential, // This is the Google ID token
+          }),
+        }
+      );
+
+      const data = await backendResponse.json();
+
+      if (!backendResponse.ok) {
+        throw new Error(data.message || "Google login failed");
+      }
+
+      // Store JWT token
+      const token = data.data?.token;
+      if (token) {
+        localStorage.setItem("jwt_token", token);
+        setSuccess("Google login successful! Redirecting...");
+        setTimeout(() => {
+          router.push("/main");
+        }, 1500);
+      } else {
+        throw new Error("Login successful, but no token received.");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load Google OAuth script
+  const loadGoogleScript = () => {
+    return new Promise((resolve, reject) => {
+      if (document.getElementById("google-script")) {
+        resolve();
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.id = "google-script";
+      script.src = "https://accounts.google.com/gsi/client";
+      script.onload = resolve;
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
   };
 
   // Handle forgot password

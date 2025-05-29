@@ -1,7 +1,11 @@
 package handler
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
 	"net/http"
+	"net/url"
 	"time"
 
 	"warasin/internal/domain"
@@ -41,10 +45,11 @@ func (h *userHandler) Register(c *gin.Context) {
 	}
 
 	user := &domain.User{
-		Email:    request.Email,
-		Password: request.Password,
-		Name:     request.Name,
-		UserType: request.UserType,
+		Email:        request.Email,
+		Password:     request.Password,
+		Name:         request.Name,
+		UserType:     request.UserType,
+		AuthProvider: "local",
 	}
 
 	createdUser, err := h.userUsecase.Register(user)
@@ -56,7 +61,11 @@ func (h *userHandler) Register(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, createdUser)
+	c.JSON(http.StatusOK, gin.H{
+		"error":   false,
+		"message": "User registered successfully",
+		"data":    createdUser,
+	})
 }
 
 func (h *userHandler) Login(c *gin.Context) {
@@ -92,10 +101,94 @@ func (h *userHandler) Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"user_id":    user.ID,
-		"token":      token,
-		"expires_at": expiresAt.Format(time.RFC3339),
+		"error": false,
+		"data": gin.H{
+			"user_id":    user.ID,
+			"token":      token,
+			"expires_at": expiresAt.Format(time.RFC3339),
+			"user":       user,
+		},
 	})
+}
+
+func (h *userHandler) GoogleLogin(c *gin.Context) {
+	var request struct {
+		Token string `json:"token" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// Verify Google token and get user info
+	googleUserInfo, err := h.verifyGoogleToken(request.Token)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": "Invalid Google token: " + err.Error(),
+		})
+		return
+	}
+
+	// Process Google login
+	user, err := h.userUsecase.GoogleLogin(googleUserInfo)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// Generate JWT token
+	token, expiresAt, err := h.jwtService.GenerateToken(user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   true,
+			"message": "Failed to generate token",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"data": gin.H{
+			"user_id":    user.ID,
+			"token":      token,
+			"expires_at": expiresAt.Format(time.RFC3339),
+			"user":       user,
+		},
+	})
+}
+
+// verifyGoogleToken verifies Google OAuth token and returns user info
+func (h *userHandler) verifyGoogleToken(token string) (*domain.GoogleUserInfo, error) {
+	// Google's userinfo endpoint
+	resp, err := http.Get(fmt.Sprintf("https://www.googleapis.com/oauth2/v2/userinfo?access_token=%s", url.QueryEscape(token)))
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("invalid token: status %d", resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var googleUser domain.GoogleUserInfo
+	if err := json.Unmarshal(body, &googleUser); err != nil {
+		return nil, err
+	}
+
+	return &googleUser, nil
 }
 
 func (h *userHandler) GetProfile(c *gin.Context) {
@@ -117,7 +210,10 @@ func (h *userHandler) GetProfile(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"data":  user,
+	})
 }
 
 func (h *userHandler) UpdateProfile(c *gin.Context) {
@@ -172,7 +268,10 @@ func (h *userHandler) UpdateProfile(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"data":  user,
+	})
 }
 
 func (h *userHandler) ChangePassword(c *gin.Context) {
@@ -201,7 +300,7 @@ func (h *userHandler) ChangePassword(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"success": true,
+		"error":   false,
 		"message": "Password changed successfully",
 	})
 }

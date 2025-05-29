@@ -50,7 +50,8 @@ func RegisterRoutes(
 	users := v1.Group("/users")
 	{
 		users.POST("/register", userHandler.Register)
-		users.POST("/login", userHandler.Login, logActivityMiddleware) // Log login activity
+		users.POST("/login", userHandler.Login, logActivityMiddleware)              // Log login activity
+		users.POST("/google-login", userHandler.GoogleLogin, logActivityMiddleware) // Add Google login route
 
 		// Protected routes
 		profile := users.Group("/profile").Use(authMiddleware)
