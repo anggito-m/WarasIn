@@ -1,0 +1,26 @@
+services:
+  goapp:
+    container_name: warasin-api
+    build:
+      context: .
+      dockerfile: go.dockerfile
+    environment:
+      APP_NAME: WarasIn
+      ENVIRONMENT: production
+      PORT: ${PORT:-8080}
+      DATABASE_URL: "${DATABASE_URL}"
+      JWT_SECRET: "${JWT_SECRET}"
+      GIN_MODE: release
+    ports:
+      - "${PORT:-8080}:${PORT:-8080}"
+    restart: unless-stopped
+
+  migrate:
+    image: migrate/migrate
+    environment:
+      DATABASE_URL: "${DATABASE_URL}"
+    volumes:
+      - ./migrations:/migrations
+    command: ["-path", "/migrations", "-database", "${DATABASE_URL}", "up"]
+    depends_on:
+      - goapp
