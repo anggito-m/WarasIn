@@ -245,7 +245,7 @@ export const Footer = () => {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <span className="text-sm text-gray-500">hi@warasio.com</span>
+                <span className="text-sm text-gray-500">warasin@gmail.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <svg
@@ -263,7 +263,7 @@ export const Footer = () => {
                   />
                 </svg>
                 <span className="text-sm text-gray-500">
-                  (+1) 555-0123 - 5582
+                  (+62) 8555-0123 - 5582
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -288,9 +288,11 @@ export const Footer = () => {
                   />
                 </svg>
                 <span className="text-sm text-gray-500">
-                  JL Diponegoro, Tegalrejo
-                  <br />
-                  Yogyakarta, 55292
+                  Universitas Gadjah Mada<br />
+                  Jl. Teknika Utara, Pogung<br />
+                  Sleman, Yogyakarta<br />
+                  <span className="text-gray-400">Indonesia</span>
+            
                 </span>
               </li>
             </ul>
