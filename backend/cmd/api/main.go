@@ -49,24 +49,49 @@ func main() {
 	// Initialize use cases
 	userUsecase := usecase.NewUserUsecase(userRepo)
 	journalUsecase := usecase.NewJournalUsecase(journalRepo)
-	moodUsecase := usecase.NewMoodUsecase(moodRepo, journalRepo) // Add journalRepo
+	moodUsecase := usecase.NewMoodUsecase(moodRepo, journalRepo)
 	chatUsecase := usecase.NewChatUsecase(chatRepo)
 	resourceUsecase := usecase.NewResourceUsecase(resourceRepo)
-	paymentUsecase := usecase.NewPaymentUsecase(paymentRepo, userRepo) // Add userRepo
+	paymentUsecase := usecase.NewPaymentUsecase(paymentRepo, userRepo)
 	activityUsecase := usecase.NewActivityUsecase(activityRepo)
 
 	// Initialize router
 	router := gin.Default()
 
-	// Configure CORS
-	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
+	// Configure CORS based on environment
+	corsConfig := cors.Config{
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type", "Accept"},
 		ExposeHeaders:    []string{"Content-Length"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
-	}))
+	}
+
+	// Set allowed origins based on environment
+	if gin.Mode() == gin.ReleaseMode {
+		// Production - specify your Vercel domain
+		corsConfig.AllowOrigins = []string{
+			"https://waras-in.vercel.app/", // Replace with your actual Vercel domain
+			// Add any other production domains here
+		}
+	} else {
+		// Development - allow localhost
+		corsConfig.AllowOrigins = []string{
+			"http://localhost:3000",
+			"http://localhost:3001",
+			"http://127.0.0.1:3000",
+		}
+	}
+
+	router.Use(cors.New(corsConfig))
+
+	// Add a health check endpoint for Render
+	router.GET("/health", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"status": "ok",
+			"time":   time.Now().UTC(),
+		})
+	})
 
 	// Register API routes
 	httpDelivery.RegisterRoutes(
