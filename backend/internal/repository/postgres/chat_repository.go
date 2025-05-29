@@ -30,7 +30,7 @@ func NewChatRepository(db *sql.DB) ChatRepository {
 
 func (r *chatRepository) CreateSession(session *domain.ChatSession) (*domain.ChatSession, error) {
 	query := `
-		INSERT INTO chat_session (user_id, start_time)
+		INSERT INTO chat_sessions (user_id, start_time)
 		VALUES ($1, $2)
 		RETURNING session_id
 	`
@@ -50,7 +50,7 @@ func (r *chatRepository) CreateSession(session *domain.ChatSession) (*domain.Cha
 
 func (r *chatRepository) EndSession(sessionID, userID int, endTime time.Time) error {
 	query := `
-		UPDATE chat_session
+		UPDATE chat_sessions
 		SET end_time = $3
 		WHERE session_id = $1 AND user_id = $2 AND end_time IS NULL
 	`
@@ -78,7 +78,7 @@ func (r *chatRepository) GetSessionByID(sessionID, userID int) (*domain.ChatSess
 
 	query := `
 		SELECT session_id, user_id, start_time, end_time
-		FROM chat_session
+		FROM chat_sessions
 		WHERE session_id = $1 AND user_id = $2
 	`
 
@@ -107,7 +107,7 @@ func (r *chatRepository) GetSessionsByUserID(userID int, limit, offset int, star
 	// Get total count
 	countQuery := `
 		SELECT COUNT(*)
-		FROM chat_session
+		FROM chat_sessions
 		WHERE user_id = $1
 	`
 
@@ -142,7 +142,7 @@ func (r *chatRepository) GetSessionsByUserID(userID int, limit, offset int, star
 
 	query := `
 		SELECT session_id, user_id, start_time, end_time
-		FROM chat_session
+		FROM chat_sessions
 		WHERE user_id = $1
 	`
 
@@ -194,7 +194,7 @@ func (r *chatRepository) GetSessionsByUserID(userID int, limit, offset int, star
 
 func (r *chatRepository) CreateMessage(message *domain.ChatMessage) (*domain.ChatMessage, error) {
 	query := `
-		INSERT INTO chat_message (session_id, message_content, sent_at, sender_type)
+		INSERT INTO chat_messages (session_id, message_content, sent_at, sender_type)
 		VALUES ($1, $2, $3, $4)
 		RETURNING message_id
 	`
@@ -218,7 +218,7 @@ func (r *chatRepository) GetMessagesBySessionID(sessionID int, limit int, before
 	// Get total count
 	countQuery := `
 		SELECT COUNT(*)
-		FROM chat_message
+		FROM chat_messages
 		WHERE session_id = $1
 	`
 
@@ -245,7 +245,7 @@ func (r *chatRepository) GetMessagesBySessionID(sessionID int, limit int, before
 
 	query := `
 		SELECT message_id, session_id, message_content, sent_at, sender_type
-		FROM chat_message
+		FROM chat_messages
 		WHERE session_id = $1
 	`
 

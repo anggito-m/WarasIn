@@ -43,15 +43,15 @@ func RegisterRoutes(
 	authMiddleware := middleware.AuthMiddleware(jwtService)
 	premiumMiddleware := middleware.RequireUserType("premium")
 
-	// Activity logging middleware - corrected
+	// Activity logging middleware
 	logActivityMiddleware := handler.LogUserActivity(activityUsecase)
 
 	// User routes
 	users := v1.Group("/users")
 	{
 		users.POST("/register", userHandler.Register)
-		users.POST("/login", userHandler.Login, logActivityMiddleware)              // Log login activity
-		users.POST("/google-login", userHandler.GoogleLogin, logActivityMiddleware) // Add Google login route
+		users.POST("/login", userHandler.Login, logActivityMiddleware)
+		users.POST("/google-login", userHandler.GoogleLogin, logActivityMiddleware)
 
 		// Protected routes
 		profile := users.Group("/profile").Use(authMiddleware)
@@ -82,19 +82,28 @@ func RegisterRoutes(
 		mood.GET("/:entry_id", moodHandler.GetByID)
 	}
 
-	// Chat routes - Fixed structure to avoid unused variable
-	sessions := v1.Group("/chat/sessions").Use(authMiddleware)
+	// Chat routes - Updated dengan Gemini integration
+	chat := v1.Group("/chat") // 'chat' is now of type *gin.RouterGroup
+	chat.Use(authMiddleware)  // Apply authMiddleware to all routes and subgroups within 'chat'
 	{
-		sessions.POST("", chatHandler.StartSession, logActivityMiddleware)
-		sessions.PATCH("/:session_id", chatHandler.EndSession, logActivityMiddleware)
-		sessions.GET("", chatHandler.GetSessions)
-	}
+		// Session management
+		sessions := chat.Group("/sessions") // This is now correct, chat.Group() is called on *gin.RouterGroup
+		{
+			sessions.POST("", chatHandler.StartSession, logActivityMiddleware)
+			sessions.PATCH("/:session_id", chatHandler.EndSession, logActivityMiddleware)
+			sessions.GET("", chatHandler.GetSessions)
+		}
 
-	// Chat messages routes
-	messages := v1.Group("/chat/sessions/:session_id/messages").Use(authMiddleware)
-	{
-		messages.POST("", chatHandler.SendMessage, logActivityMiddleware)
-		messages.GET("", chatHandler.GetMessages)
+		// Chat messages routes
+		messages := chat.Group("/sessions/:session_id/messages") // This is also correct
+		{
+			messages.POST("", chatHandler.SendMessage, logActivityMiddleware)
+			messages.GET("", chatHandler.GetMessages)
+		}
+
+		// NEW: Google Gemini AI Chat endpoint (FREE)
+		// chat.POST is also correct as *gin.RouterGroup implements gin.IRoutes
+		chat.POST("/gemini", chatHandler.GeminiChat, logActivityMiddleware)
 	}
 
 	// Resource routes
