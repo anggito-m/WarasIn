@@ -12,13 +12,14 @@ type chatUsecase struct {
 	chatRepo postgres.ChatRepository
 }
 
-// ChatUsecase interface
+// ChatUsecase interface - tambahkan DeleteSession
 type ChatUsecase interface {
 	StartSession(userID int) (*domain.ChatSession, error)
 	EndSession(sessionID, userID int) (*domain.ChatSession, error)
 	GetSessions(userID int, limit, offset int, startDate, endDate string) ([]*domain.ChatSession, int, error)
 	SendMessage(sessionID, userID int, content, senderType string) (*domain.ChatMessage, error)
 	GetMessages(sessionID, userID int, limit, beforeID int) ([]*domain.ChatMessage, int, error)
+	DeleteSession(sessionID, userID int) error // Tambahkan method ini
 }
 
 // NewChatUsecase creates a new chat use case
@@ -128,4 +129,24 @@ func (u *chatUsecase) GetMessages(sessionID, userID int, limit, beforeID int) ([
 	}
 
 	return u.chatRepo.GetMessagesBySessionID(sessionID, limit, beforeID)
+}
+
+func (u *chatUsecase) DeleteSession(sessionID, userID int) error {
+	// Validate session belongs to user
+	session, err := u.chatRepo.GetSessionByID(sessionID, userID)
+	if err != nil {
+		return err
+	}
+	if session == nil {
+		return errors.New("session not found")
+	}
+
+	// Delete all messages in the session first
+	err = u.chatRepo.DeleteMessagesBySessionID(sessionID)
+	if err != nil {
+		return err
+	}
+
+	// Delete the session
+	return u.chatRepo.DeleteSession(sessionID, userID)
 }
