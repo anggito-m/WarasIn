@@ -22,10 +22,10 @@ const pricingPackages = [
     name: "Basic",
     price: 69.99,
     features: [
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
+      "Individual therapy sessions (4 per month)",
+      "Email support between sessions",
+      "Self-assessment tools and worksheets",
+      "Basic mindfulness and coping resources",
     ],
     isHighlighted: false,
   },
@@ -33,10 +33,10 @@ const pricingPackages = [
     name: "Standard",
     price: 79.99,
     features: [
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
+      "Individual therapy sessions (6 per month)",
+      "Priority email and phone support",
+      "Personalized treatment plan development",
+      "Access to exclusive mental health resources",
     ],
     isHighlighted: false,
   },
@@ -44,10 +44,10 @@ const pricingPackages = [
     name: "Premium",
     price: 99.99,
     features: [
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
-      "Lorem ipsum dolor sit amet cons.",
+      "Unlimited individual therapy sessions",
+      "24/7 crisis support and intervention",
+      "Family and couples counseling included",
+      "Comprehensive mental health assessment",
     ],
     isHighlighted: true,
   },
@@ -70,12 +70,14 @@ export default function Home() {
         {/* Newsletter Section */}
         <section className="py-16 bg-gradient-to-l from-gradient-start to-gradient-end text-white">
           <div className="container mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Join To Our Newsletter</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              Join Our Mental Health Community
+            </h2>
             <p className="max-w-2xl mx-auto mb-8 text-blue-100">
-              Lorem ipsum dolor sit amet consectetur. Consequat vel vitae
-              ullamcorper tristique nulla etiam ipsum nisi mauris. Ultrices
-              aliquam at ipsum ullamcorper tortor rhoncus massa. Placerat libero
-              nulla amet vel. Ut ultrices dignissim.
+              Stay connected with our mental health community and receive weekly
+              tips, self-care strategies, mindfulness exercises, and exclusive
+              resources to support your journey toward better mental wellness
+              and emotional balance.
             </p>
             <div className="flex max-w-md mx-auto">
               <Input
@@ -84,7 +86,7 @@ export default function Home() {
             focus:bg-white/80 focus:text-black focus:placeholder:text-gray-400 transition-colors duration-200"
               />
               <Button className="rounded-l-none bg-orange-500 hover:bg-orange-600">
-                Subscribe Us
+                Subscribe Now
               </Button>
             </div>
           </div>
@@ -99,10 +101,11 @@ export default function Home() {
                 <h2 className="text-3xl font-bold mb-4">
                   Healing Words
                   <br />
-                  Testimonials from a<br />
-                  Mental Health
+                  Real Stories from
                   <br />
-                  Consultant
+                  Our Mental Health
+                  <br />
+                  Community
                 </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
@@ -110,13 +113,13 @@ export default function Home() {
                   <CardContent className="pt-6">
                     <div className="flex flex-col items-center mb-4">
                       <div className="h-16 w-16 rounded-full bg-orange-400 mb-2"></div>
-                      <p className="font-medium">George J. Client</p>
+                      <p className="font-medium">Sarah M.</p>
                     </div>
                     <p className="text-sm text-blue-100">
-                      Lorem ipsum dolor sit amet consectetur. Consequat vel
-                      vitae ullamcorper tristique nulla etiam ipsum nisi mauris.
-                      Ultrices aliquam at ipsum ullamcorper tortor rhoncus
-                      massa.
+                      "The therapy sessions have been life-changing. I've
+                      learned healthy coping mechanisms and finally feel like I
+                      have the tools to manage my anxiety. Thank you for
+                      creating such a safe and supportive environment."
                     </p>
                   </CardContent>
                 </Card>
@@ -124,13 +127,13 @@ export default function Home() {
                   <CardContent className="pt-6">
                     <div className="flex flex-col items-center mb-4">
                       <div className="h-16 w-16 rounded-full bg-green-500 mb-2"></div>
-                      <p className="font-medium">George J. Client</p>
+                      <p className="font-medium">Michael R.</p>
                     </div>
                     <p className="text-sm text-gray-500">
-                      Lorem ipsum dolor sit amet consectetur. Consequat vel
-                      vitae ullamcorper tristique nulla etiam ipsum nisi mauris.
-                      Ultrices aliquam at ipsum ullamcorper tortor rhoncus
-                      massa.
+                      "After struggling with depression for years, I finally
+                      found the right support. The personalized approach and
+                      genuine care made all the difference. I'm now living a
+                      much more balanced and fulfilling life."
                     </p>
                   </CardContent>
                 </Card>

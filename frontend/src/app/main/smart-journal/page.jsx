@@ -604,7 +604,11 @@ export default function SmartJournalPage() {
                 </div>
               </div>
               <p className="text-gray-500 mb-4">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit aliquam
+                Warasin is a mental health platform dedicated to providing
+                accessible tools and resources for self-reflection, emotional
+                well-being, and personal growth. Our mission is to empower
+                individuals to better understand their thoughts and feelings,
+                fostering a supportive environment for mental wellness.
               </p>
               <div className="flex gap-4">
                 <Link href="#" className="text-gray-400 hover:text-gray-500">

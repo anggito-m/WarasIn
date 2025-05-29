@@ -38,7 +38,11 @@ export const Hero = () => {
               Happy Lives
             </h1>
             <p className="text-gray-500">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit
+              Warasin is a mental health platform dedicated to providing
+                accessible tools and resources for self-reflection, emotional
+                well-being, and personal growth. Our mission is to empower
+                individuals to better understand their thoughts and feelings,
+                fostering a supportive environment for mental wellness.
             </p>
           </div>
           <Button className="bg-orange-500 hover:bg-orange-600 rounded-full px-6 py-5">
