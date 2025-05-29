@@ -19,7 +19,26 @@ import (
 	"warasin/internal/repository/postgres"
 	"warasin/internal/usecase"
 	"warasin/pkg/database"
+
+	"github.com/golang-migrate/migrate/v4"
+	// "github.com/golang-migrate/migrate/v4/database/postgres"
 )
+
+func runMigrations(databaseURL string) {
+	m, err := migrate.New("file://migrations", databaseURL)
+	if err != nil {
+		log.Printf("Could not create migrate instance: %v", err)
+		return
+	}
+	defer m.Close()
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Printf("Could not run migrations: %v", err)
+		return
+	}
+
+	log.Println("Migrations ran successfully")
+}
 
 func main() {
 	// Load environment variables
